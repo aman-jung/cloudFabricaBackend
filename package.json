@@ -1,0 +1,33 @@
+{
+  "name": "boiler-plate-for-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.6.2",
+    "bcrypt": "^3.0.5",
+    "body-parser": "^1.18.3",
+    "bunyan": "^1.8.12",
+    "dotenv": "^7.0.0",
+    "express": "^4.16.4",
+    "fs": "0.0.1-security",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.11",
+    "log": "^4.0.1",
+    "mongodb": "^2.2.33",
+    "mongoose": "^5.4.19",
+    "path": "^0.12.7",
+    "require-all": "^3.0.0",
+    "slack-notify": "^0.1.7"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.0",
+    "gulp-apidoc": "^0.2.8",
+    "gulp-util": "^3.0.8"
+  }
+}
