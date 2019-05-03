@@ -16,7 +16,8 @@ module.exports = class appAccessToken extends Abstract{
                     let createObj = {
                         name:req.body.name,
                         email:req.body.email,
-                        password:req.body.password
+                        password:req.body.password,
+                        type:req.body.type
                     }
                     user = await database.models.user.create(createObj)
                     
@@ -33,16 +34,19 @@ module.exports = class appAccessToken extends Abstract{
 
     async verify(req){
         return new Promise(async (resolve,reject)=>{
+
+            try{
+
             let userVerify = await database.models.user.findOne({email:req.body.email}).lean()
 
             if(!userVerify){
-               res.send("Invalid email or password")   
+               throw("Invalid email or password")   
             }
 
             let invalidPassword = await bcrypt.compare(req.body.password,userVerify.password)
 
             if(!invalidPassword){
-                res.send("Invalid email/Password")
+                throw("Invalid email/Password")
             }
 
             var token = jwt.sign({_id:userVerify._id}, "PrivateKey",{
@@ -52,9 +56,14 @@ module.exports = class appAccessToken extends Abstract{
             return resolve({
                 success:true,
                 message:"token generated successfully",
-                token:token
+                token:token,
+                type:userVerify.type
             })
-
+        } catch(error){
+            return reject({
+                message:error
+            })
+        }
         })
     }
 }

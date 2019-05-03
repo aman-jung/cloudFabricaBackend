@@ -19,7 +19,8 @@ module.exports = function(app){
                     message:result.message,
                     status:result.status?result.status:200,
                     result:result.result,
-                    token:result.token
+                    token:result.token,
+                    type:result.type
                 })
 
                 // if(process.env.ENABLE_BUNYAN_LOGGING == "ON"){
@@ -33,10 +34,11 @@ module.exports = function(app){
                 }
             } catch(error){
                 
-                // res.status(error.status?error.status:400).json({
-                //     status:error.status?error.status:400,
-                //     message:error.message
-                // })
+                res.status(error.status?error.status:400).json({
+                    status:error.status?error.status:400,
+                    message:error.message
+                })
+
                 const toLogObject = {
                     method:req.method,
                     url:req.url,

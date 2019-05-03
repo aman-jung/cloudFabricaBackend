@@ -25,9 +25,5 @@
     "require-all": "^3.0.0",
     "slack-notify": "^0.1.7"
   },
-  "devDependencies": {
-    "gulp": "^4.0.0",
-    "gulp-apidoc": "^0.2.8",
-    "gulp-util": "^3.0.8"
-  }
+  "devDependencies": {}
 }
