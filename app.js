@@ -75,7 +75,7 @@ app.all("*",(req,res,next)=>{
 
 router(app)
 
-app.listen(config.port,()=>{
-  log.info("Environment:"+(process.env.NODE_ENV));
-  log.info("Application is running on the port:" + config.port);  
-})  
+let server = app.listen(config.port ,()=>{
+  let port = server.address().port;
+  log.info("Application is running on the port:" + port);  
+}) 

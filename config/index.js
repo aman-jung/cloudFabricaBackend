@@ -3,8 +3,8 @@ global.database = require("./dbConfig")(config.DB_config.mongodb_connection)
 }
 
 let configuration = {
-    host:process.env.HOST,
-    port:process.env.PORT,
+    // host:process.env.HOST,
+    port:process.env.PORT || 4201,
     log: "debug",
     DB_config:{
         mongodb_connection:{
