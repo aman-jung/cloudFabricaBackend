@@ -17,6 +17,10 @@ let app = express()
 app.use(bodyParser.json({limit:'50MB'}))
 app.use(bodyParser.urlencoded({limit:'50MB',extended:false}))
 
+app.get('/',(req,res)=>{
+  res.send("hello world")
+})
+
 global.loggerObj = bunyan.createLogger({
     name: "foo",
     streams: [
