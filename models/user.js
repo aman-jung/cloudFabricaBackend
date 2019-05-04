@@ -4,6 +4,7 @@ module.exports={
         name:String,
         email:String,
         password:String,
-        type:String
+        type:String,
+        createdAt:Date
     }
 }

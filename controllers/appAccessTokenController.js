@@ -17,7 +17,8 @@ module.exports = class appAccessToken extends Abstract{
                         name:req.body.name,
                         email:req.body.email,
                         password:req.body.password,
-                        type:req.body.type
+                        type:req.body.type,
+                        createdAt:new Date()
                     }
                     user = await database.models.user.create(createObj)
                     
