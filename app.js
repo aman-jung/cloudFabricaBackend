@@ -14,6 +14,10 @@ fs.existsSync("logs") || fs.mkdirSync("logs");
 
 let app = express()
 
+const cors = require("cors");
+
+app.use(cors());
+
 app.use(bodyParser.json({limit:'50MB'}))
 app.use(bodyParser.urlencoded({limit:'50MB',extended:false}))
 
