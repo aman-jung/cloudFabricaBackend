@@ -20,7 +20,8 @@ module.exports = function(app){
                     status:result.status?result.status:200,
                     result:result.result,
                     token:result.token,
-                    type:result.type
+                    type:result.type,
+                    name:result.name
                 })
 
                 // if(process.env.ENABLE_BUNYAN_LOGGING == "ON"){

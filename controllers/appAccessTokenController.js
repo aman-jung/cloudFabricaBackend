@@ -58,7 +58,8 @@ module.exports = class appAccessToken extends Abstract{
                 success:true,
                 message:"token generated successfully",
                 token:token,
-                type:userVerify.type
+                type:userVerify.type,
+                name:userVerify.name
             })
         } catch(error){
             return reject({
