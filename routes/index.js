@@ -1,5 +1,5 @@
-let fs = require("fs")
-let slackClient = require(ROOT +"/generics/helpers/slackCommunication")
+// let fs = require("fs")
+// let slackClient = require(ROOT +"/generics/helpers/slackCommunication")
 let authenticator = require(ROOT +"/generics/helpers/middleware/authenticator")
 
 module.exports = function(app){
@@ -9,11 +9,13 @@ module.exports = function(app){
     let router = async function(req,res,next){
         req.params.controller += "Controller";
 
-        if(!controllers[req.params.controller]) return next()
+        if(!controllers[req.params.version]) return next()
+        if(!controllers[req.params.version][req.params.controller])return next()
+        if(!controllers[req.params.version][req.params.controller][req.params.method]) return next()
 
         else{
             try{
-                var result = await controllers[req.params.controller][req.params.method](req);
+                var result = await controllers[req.params.version][req.params.controller][req.params.method](req);
 
                 res.status(result.status?result.status:200).json({
                     message:result.message,
@@ -49,7 +51,7 @@ module.exports = function(app){
                     errorStack:error.stack?error.stack:null
                 }
 
-                slackClient.sendLogger(toLogObject)
+                // slackClient.sendLogger(toLogObject)
 
                 console.log("-------Response STARTS Here ----------------")
                 console.log(error)
@@ -59,6 +61,6 @@ module.exports = function(app){
         
     }
 
-    app.all(applicationBaseUrl +"/api/:controller/:method",router)
-    app.all(applicationBaseUrl +"/api/:controller/:method/:id",router)
+    app.all(applicationBaseUrl +"/api/:version/:controller/:method",router)
+    app.all(applicationBaseUrl +"/api/:version/:controller/:method/:id",router)
 }

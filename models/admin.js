@@ -1,5 +1,5 @@
 module.exports={
-    name:"user",
+    name:"admin",
     schema:{
         "name":String,
         "email":String,
@@ -7,6 +7,7 @@ module.exports={
         "type":String,
         "createdAt":Date,
         "person of contact":String,
-        "Phone number":Number
+        "phone number":Number,
+        "companyName":String
     }
 }

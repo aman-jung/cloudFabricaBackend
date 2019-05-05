@@ -1,0 +1,10 @@
+module.exports={
+    name:"superAdmin",
+    schema:{
+        "name":String,
+        "email":String,
+        "password":String,
+        "type":String,
+        "createdAt":Date
+    }
+}

@@ -2,9 +2,12 @@ let requireAll = require("require-all")
 let path = require("path")
 let fs = require("fs")
 
+gen = Object.assign({},global)
+
 module.exports = function(){
 
     global.ROOT = path.join(__dirname,"..");
+    gen.utils = require(ROOT+"/generics/helpers/utils")
     global.config = require(".");
     global.async = require("async");
     global._ = require("lodash");
@@ -12,6 +15,7 @@ module.exports = function(){
     global.Abstract = require(ROOT +"/generics/abstract");
     global.bcrypt = require("bcrypt")
     global.jwt = require("jsonwebtoken")
+    global.mongoose = require("mongoose")
 
     // global.models = requireAll({
     //     dirname     :  ROOT + '/models',
@@ -39,10 +43,11 @@ module.exports = function(){
       }
     })
 
-    fs.readdirSync(ROOT+'/controllers').forEach(eachController=>{
+    fs.readdirSync(ROOT+'/controllers/v1/').forEach(eachController=>{
       if (eachController.match(/\.js$/) !== null) {
-        let fsFile = eachController.replace('.js','')
-        global[fsFile +  'BaseControllers'] = require(ROOT+'/controllers/'+eachController)
+        let fsFile = eachController.replace('Controller.js','')
+        global[fsFile +  'BaseControllers'] = require(ROOT+'/controllers/v1/'+eachController)
         } 
     })
+    console.log("here")
 }
