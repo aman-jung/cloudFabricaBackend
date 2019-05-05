@@ -13,14 +13,7 @@ module.exports = class appAccessToken extends Abstract{
                 }else{ 
                     const salt = await bcrypt.genSalt(10);
                     req.body.password = await bcrypt.hash(req.body.password, salt);
-                    let createObj = {
-                        name:req.body.name,
-                        email:req.body.email,
-                        password:req.body.password,
-                        type:req.body.type,
-                        createdAt:new Date()
-                    }
-                    user = await database.models.user.create(createObj)
+                    user = await database.models.user.create(req.body.users)
                     
                     return resolve({
                         message:"Information saved successfully",
@@ -67,5 +60,5 @@ module.exports = class appAccessToken extends Abstract{
             })
         }
         })
-    }
+    }   
 }
