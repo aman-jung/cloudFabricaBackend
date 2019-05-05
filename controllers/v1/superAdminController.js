@@ -25,7 +25,7 @@ module.exports = class SuperAdmin extends Abstract{
                     
                     return resolve({
                         message:"Information saved successfully",
-                        result:user
+                        result:superAdmin
                     })
                 }
             }catch(error){

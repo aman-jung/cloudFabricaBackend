@@ -4,14 +4,15 @@ module.exports = function(req,res,next){
 
     if(!(disableTokenCheckForApis.includes(req.path))){
         let token = req.headers['x-authenticated-user-token']
+
         if(token){
             jwt.verify(token,"PrivateKey",async function(err,decode){
                     
-                let userInformation = await database.models.user.findOne({
-                    _id:decode._id
-                }).lean()
+                // let userInformation = await database.models.user.findOne({
+                //     _id:decode._id
+                // }).lean()
         
-                req.userDetails = _.omit(userInformation,"password")
+                // req.userDetails = _.omit(userInformation,"password")
                 next()
             })
         } else{

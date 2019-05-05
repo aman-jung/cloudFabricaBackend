@@ -1,4 +1,4 @@
-module.exports = class CustomerExecutive extends Abstract{
+module.exports = class CustomerExecutives extends Abstract{
     
     constructor(){
         super(customerExecutivesSchema)
