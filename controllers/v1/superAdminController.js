@@ -35,7 +35,7 @@ module.exports = class SuperAdmin extends Abstract{
     }
     
     async verify(req){
-        let tokenValidate = await gen.utils.loginUser("admin",req.body)
+        let tokenValidate = await gen.utils.loginUser("superAdmin",req.body)
         return tokenValidate
     }
 }
