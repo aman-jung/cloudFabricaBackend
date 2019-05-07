@@ -18,6 +18,12 @@ const cors = require("cors");
 
 app.use(cors());
 
+app.use(express.static('public'))
+
+// app.get("/apidoc", (req, res) => {
+//   res.sendFile(path.join(__dirname, "/public/apidoc/index.html"));
+// })
+
 app.use(bodyParser.json({limit:'60MB'}))
 app.use(bodyParser.urlencoded({limit:'50MB',extended:false}))
 

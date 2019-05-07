@@ -23,6 +23,7 @@
     "log": "^4.0.1",
     "mongodb": "^2.2.33",
     "mongoose": "^5.4.19",
+    "nodemon": "^1.19.0",
     "path": "^0.12.7",
     "require-all": "^3.0.0",
     "slack-notify": "^0.1.7"
