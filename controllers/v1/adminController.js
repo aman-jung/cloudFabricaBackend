@@ -3,6 +3,18 @@ module.exports = class Admin extends Abstract{
         super(adminSchema)
     }
 
+    /**
+ * @api {post} {{url}}/test/api/v1/admin/create admin Login credentials
+ * @apiGroup admin
+ * @apiSuccess {String} email
+ * @apiSuccess {String} name
+ * @apiSuccess {String} type 
+ * @apiSuccess {String} person of contact
+ * @apiSuccess {String} phone number 
+ * @apiSuccess {String} companyName    
+ * @apiSuccess {String} password
+ */
+
     async create(req){
         return new Promise(async (resolve,reject)=>{
             try{
@@ -37,11 +49,21 @@ module.exports = class Admin extends Abstract{
         })
     }
     
+    /**
+ * @api {post} {{url}}/test/api/v1/admin/verify admin Login credentials
+ * @apiGroup admin
+ * @apiSuccess {String} Email
+ * @apiSuccess {String} Password
+ */
     async verify(req){
         let tokenValidate = await gen.utils.loginUser("admin",req.body)
         return tokenValidate
     }
 
+    /**
+ * @api {get} {{url}}/test/api/v1/admin/list List all the admin
+ * @apiGroup admin
+ */
     async list(req){
         
         return new Promise(async (resolve,reject)=>{

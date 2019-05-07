@@ -4,6 +4,18 @@ module.exports = class CustomerExecutives extends Abstract{
         super(customerExecutivesSchema)
     }
 
+    /**
+ * @api {post} {{url}}/test/api/v1/customerExecutives/create customer executive 
+ * @apiGroup customer executive
+ * @apiSuccess {String} email
+ * @apiSuccess {String} name
+ * @apiSuccess {String} type 
+ * @apiSuccess {String} employeeId
+ * @apiSuccess {String} adminId
+ * @apiSuccess {String} companyName    
+ * @apiSuccess {String} password
+ */
+    
     async create(req){
         return new Promise(async (resolve,reject)=>{
             try{
@@ -38,10 +50,22 @@ module.exports = class CustomerExecutives extends Abstract{
         })
     }
     
+    /**
+ * @api {post} {{url}}/test/api/v1/customerExecutives/verify verify customer executive 
+ * @apiGroup customer executive
+ * @apiSuccess {String} email  
+ * @apiSuccess {String} password
+ */
+
     async verify(req){
         let tokenValidate = gen.utils.loginUser("customerExecutives",req.body)
         return tokenValidate
     }
+
+     /**
+    * @api {get} {{url}}/test/api/v1/customerExecutives/list?companyName=vodafone list customer executive 
+    * @apiGroup customer executive
+    */
 
     async list(req){
 

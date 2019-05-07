@@ -1,98 +1,5 @@
 define({ "api": [
   {
-    "type": "get",
-    "url": "/tasks",
-    "title": "List all tasks",
-    "group": "Tasks",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "tasks",
-            "description": "<p>Task's list</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "tasks.id",
-            "description": "<p>Task id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "tasks.title",
-            "description": "<p>Task title</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "tasks.done",
-            "description": "<p>Task is done?</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Date",
-            "optional": false,
-            "field": "tasks.updated_at",
-            "description": "<p>Update's date</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Date",
-            "optional": false,
-            "field": "tasks.created_at",
-            "description": "<p>Register's date</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success",
-          "content": "HTTP/1.1 200 OK\n[{\n  \"id\": 1,\n  \"title\": \"Study\",\n  \"done\": false\n  \"updated_at\": \"2016-02-10T15:46:51.778Z\",\n  \"created_at\": \"2016-02-10T15:46:51.778Z\"\n}]",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./controllers/v1/superAdminController.js",
-    "groupTitle": "Tasks",
-    "name": "GetTasks"
-  },
-  {
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "optional": false,
-            "field": "varname1",
-            "description": "<p>No type.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "varname2",
-            "description": "<p>With type.</p>"
-          }
-        ]
-      }
-    },
-    "type": "",
-    "url": "",
-    "version": "0.0.0",
-    "filename": "./doc/main.js",
-    "group": "_home_user_Documents_Aman_Imp_Files_Project_doc_main_js",
-    "groupTitle": "_home_user_Documents_Aman_Imp_Files_Project_doc_main_js",
-    "name": ""
-  },
-  {
     "type": "",
     "url": "private",
     "title": "",
@@ -11169,5 +11076,245 @@ define({ "api": [
     "group": "_home_user_Documents_Aman_Imp_Files_Project_public_apidoc_main_js",
     "groupTitle": "_home_user_Documents_Aman_Imp_Files_Project_public_apidoc_main_js",
     "name": ""
+  },
+  {
+    "type": "get",
+    "url": "{{url}}/test/api/v1/admin/list",
+    "title": "List all the admin",
+    "group": "admin",
+    "version": "0.0.0",
+    "filename": "./controllers/v1/adminController.js",
+    "groupTitle": "admin",
+    "name": "GetUrlTestApiV1AdminList"
+  },
+  {
+    "type": "post",
+    "url": "{{url}}/test/api/v1/admin/create",
+    "title": "admin Login credentials",
+    "group": "admin",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "person",
+            "description": "<p>of contact</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>number</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "companyName",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./controllers/v1/adminController.js",
+    "groupTitle": "admin",
+    "name": "PostUrlTestApiV1AdminCreate"
+  },
+  {
+    "type": "post",
+    "url": "{{url}}/test/api/v1/admin/verify",
+    "title": "admin Login credentials",
+    "group": "admin",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Email",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Password",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./controllers/v1/adminController.js",
+    "groupTitle": "admin",
+    "name": "PostUrlTestApiV1AdminVerify"
+  },
+  {
+    "type": "get",
+    "url": "{{url}}/test/api/v1/customerExecutives/list?companyName=vodafone",
+    "title": "list customer executive",
+    "group": "customer_executive",
+    "version": "0.0.0",
+    "filename": "./controllers/v1/customerExecutivesController.js",
+    "groupTitle": "customer_executive",
+    "name": "GetUrlTestApiV1CustomerexecutivesListCompanynameVodafone"
+  },
+  {
+    "type": "post",
+    "url": "{{url}}/test/api/v1/customerExecutives/create",
+    "title": "customer executive",
+    "group": "customer_executive",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "employeeId",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "adminId",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "companyName",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./controllers/v1/customerExecutivesController.js",
+    "groupTitle": "customer_executive",
+    "name": "PostUrlTestApiV1CustomerexecutivesCreate"
+  },
+  {
+    "type": "post",
+    "url": "{{url}}/test/api/v1/customerExecutives/verify",
+    "title": "verify customer executive",
+    "group": "customer_executive",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./controllers/v1/customerExecutivesController.js",
+    "groupTitle": "customer_executive",
+    "name": "PostUrlTestApiV1CustomerexecutivesVerify"
+  },
+  {
+    "type": "post",
+    "url": "{{url}}/test/api/v1/superAdmin/verify",
+    "title": "superAdmin Login credentials",
+    "group": "superAdmin",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Email",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Password",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./controllers/v1/superAdminController.js",
+    "groupTitle": "superAdmin",
+    "name": "PostUrlTestApiV1SuperadminVerify"
   }
 ] });
