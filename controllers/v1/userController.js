@@ -70,4 +70,5 @@ module.exports = class User extends Abstract{
     }
     })
     }
-}
+
+}   

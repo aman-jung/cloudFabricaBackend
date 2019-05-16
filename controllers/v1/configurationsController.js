@@ -24,6 +24,7 @@ module.exports = class Configurations extends Abstract{
         })
     }
 
+    
     async navigation(req){
         return new Promise(async(resolve,reject)=>{
             try{

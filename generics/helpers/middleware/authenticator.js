@@ -5,15 +5,21 @@ module.exports = function(req,res,next){
     if(!(disableTokenCheckForApis.includes(req.path))){
         let token = req.headers['x-authenticated-user-token']
 
-        if(token){
+        if(token){  
             jwt.verify(token,"PrivateKey",async function(err,decode){
                 
+                if(!decode){
+                    return res.status(404).send({
+                        success:false,
+                        message:"User is not recognized"    
+                    })
+                }
                 let userInformation = await database.models.user.findOne({
                     _id:decode._id
-                }).lean()
+                },{password:0}).lean()
         
                 if(userInformation){
-                    req.userDetails = _.omit(userInformation,"password")
+                    req.userDetails = userInformation
                 }else{
                     return res.status(404).send({
                         success:false,

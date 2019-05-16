@@ -5,6 +5,6 @@ module.exports={
         "email":"String",
         "password":"String",
         "role":"String",
-        "createdAt":"Date"    
+        "createdAt":"Date"  
     }
 }

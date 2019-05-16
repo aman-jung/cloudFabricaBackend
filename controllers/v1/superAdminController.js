@@ -1,48 +1,72 @@
 module.exports = class SuperAdmin extends Abstract{
     constructor(){
-        super(superAdminSchema)
+        super(adminDetailsSchema)
     }
 
-    async create(req){
-        return new Promise(async (resolve,reject)=>{
-            try{
-                let superAdmin = await database.models.superAdmin.findOne({email:req.body.email}).lean()
-
-                if(superAdmin){
-                    throw "Email Id already exists"
-                }else{ 
-                    const salt = await bcrypt.genSalt(10);
-                    req.body.password = await bcrypt.hash(req.body.password, salt);
-                    superAdmin = await database.models.superAdmin.create(
-                        {
-                            name:req.body.name,
-                            email:req.body.email,
-                            password:req.body.password,
-                            type:req.body.type,
-                            createdAt:new Date()
-                        }
-                    )
-                    
-                    return resolve({
-                        message:"Information saved successfully",
-                        result:superAdmin
-                    })
-                }
-            }catch(error){
-                return reject({message:error})
-            }
-        })
-    }
-
-        /**
- * @api {post} {{url}}/test/api/v1/superAdmin/verify superAdmin Login credentials
- * @apiGroup superAdmin
- * @apiSuccess {String} Email
- * @apiSuccess {String} Password
+       /**
+ * @api {post} {{url}}/test/api/v1/superAdmin/adminDetails  create admin details
+ * @apiGroup Super Admin
+ * @apiSuccess {String} companyName
+ * @apiSuccess {String} pointOfContactName
+ * @apiSuccess {String} pointOfContactEmail 
  */
 
-    async verify(req){
-        let tokenValidate = await gen.utils.loginUser("superAdmin",req.body)
-        return tokenValidate
+    async adminDetails(req){
+        return new Promise(async (resolve,reject)=>{
+            try{
+                let adminDocuments = await database.models.adminDetails.findOne({
+                    companyName:req.body.companyName
+                })
+
+                if(adminDocuments){
+                    throw "Admin details is already added"
+                }else{
+                    adminDocuments = await database.models.adminDetails.create({
+                        companyName:req.body.companyName,
+                        pointOfContactName:req.body.pointOfContactName,
+                        pointOfContactEmail:req.body.pointOfContactEmail,
+                        createdAt:new Date()
+                    })
+
+                    return resolve({
+                        message:"Admin details created successfully",
+                        result:adminDocuments
+                    })
+                }
+            } catch(error){
+                return reject({
+                    message:error
+                })
+            }
+    })}
+    
+           /**
+ * @api {get} {{url}}/test/api/v1/superAdmin/listAdmin  list all the admins 
+ * @apiGroup Super Admin
+ * @apiSuccess {String} name
+ * @apiSuccess {String} email
+ * @apiSuccess {String} role
+ * @apiSuccess {String} createdAt
+ */
+
+    listAdmin(req){
+        return new Promise(async (resolve,reject)=>{
+            try{
+                let listAdminDocuments = await database.models.user.find({
+                    role:"admin"
+                },{password:0,_id:0}).lean()
+    
+                return resolve({
+                    message:"Admin listed",
+                    result:listAdminDocuments
+                })
+            } catch (error){
+                return reject({
+                    message:"Admin listed",
+                    result:listAdminDocuments
+                })
+            }
+            
+        })
     }
 }
