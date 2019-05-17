@@ -20,6 +20,7 @@ module.exports = class User extends Abstract{
                             email:req.body.email,
                             password:req.body.password,
                             role:req.body.role,
+                            userInformation:req.body.userInformation,
                             createdAt:new Date()
                         }
                     )
