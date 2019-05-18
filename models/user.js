@@ -1,7 +1,7 @@
 module.exports={
     name:"user",
     schema:{
-        "name":"String",
+        "companyName":"String",
         "email":"String",
         "password":"String",
         "role":"String",

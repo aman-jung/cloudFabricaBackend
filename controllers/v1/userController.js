@@ -16,7 +16,7 @@ module.exports = class User extends Abstract{
                     req.body.password = await bcrypt.hash(req.body.password, salt);
                     user = await database.models.user.create(
                         {
-                            name:req.body.name,
+                            companyName:req.body.companyName,
                             email:req.body.email,
                             password:req.body.password,
                             role:req.body.role,
