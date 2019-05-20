@@ -58,11 +58,11 @@ module.exports = class User extends Abstract{
             expiresIn: 60*60*24 
         });
 
-        return resolve({
+        return resolve({    
             success:true,
             message:"token generated successfully",
             token:token,
-            name:userVerify.name
+            companyName:userVerify.companyName
         })
     } catch(error){
         return reject({

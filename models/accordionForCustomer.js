@@ -1,9 +1,10 @@
 module.exports = {
-    name:"customerForm",
+    name:"accordionForCustomer",
     schema:{
         adminId:"ObjectId",
         companyName:String,
         createdAt:Date,
-        formResult:Array
+        allVersionData:Array,
+        type:String
     }
 }
