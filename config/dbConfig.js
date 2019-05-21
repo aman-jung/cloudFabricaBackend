@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+let ObjectId = mongoose.Types.ObjectId;
 
 let DB = function(config){
     let db = mongoose.createConnection(config.host +"/"+ config.database,config.options)
@@ -18,7 +19,8 @@ let DB = function(config){
     return{
         database:db,
         createModel:createModel,
-        models:db.models
+        models:db.models,
+        ObjectId:ObjectId
       }
 }
 

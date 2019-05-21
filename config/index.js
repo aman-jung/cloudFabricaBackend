@@ -1,5 +1,6 @@
 let db_connect = (config)=>{
 global.database = require("./dbConfig")(config.DB_config.mongodb_connection)
+global.ObjectId = database.ObjectId
 }
 
 let configuration = {

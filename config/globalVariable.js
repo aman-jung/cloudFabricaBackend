@@ -49,5 +49,4 @@ module.exports = function(){
         global[fsFile +  'BaseControllers'] = require(ROOT+'/controllers/v1/'+eachController)
         } 
     })
-    console.log("here")
 }

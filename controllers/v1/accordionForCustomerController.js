@@ -111,4 +111,40 @@ module.exports = class AccordionForCustomer extends Abstract{
             }
         })
     }
+
+    async undo(req){
+        return new Promise(async (resolve,reject)=>{
+            try{
+
+                if(!req.params.id && !req.query.type){
+                    throw "Params is required"
+                }
+
+                let accordionForCustomerDocument = await database.models.accordionForCustomer.findOne({
+                    _id:ObjectId(req.params.id),
+                    type:req.query.type
+                }).lean()
+
+                if(!accordionForCustomerDocument){
+                    throw "No Accordion found for given params"
+                } else{
+
+                    let result = {}
+                    result["adminId"] = accordionForCustomerDocument.adminId;
+                    result["companyName"] = accordionForCustomerDocument.companyName;
+                    result["type"] = accordionForCustomerDocument.type;
+                    result["allVersionData"] = accordionForCustomerDocument.allVersionData[0]
+
+                    return resolve({
+                        message:"Undo fetched successfully",
+                        result:result    
+                    })
+                }
+            } catch(error){
+                return reject({
+                    message:error
+                })
+            }
+        })
+    }
 }
