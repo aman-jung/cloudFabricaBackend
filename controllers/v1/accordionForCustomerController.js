@@ -47,7 +47,8 @@ module.exports = class AccordionForCustomer extends Abstract{
 
                 let accordionDocument = await database.models.accordionForCustomer.findOne({
                     adminId:req.body.adminId,
-                    type:req.body.type
+                    type:req.body.type,
+                    companyName:req.body.companyName
                 }).lean()
 
                 if(!accordionDocument){
@@ -60,7 +61,7 @@ module.exports = class AccordionForCustomer extends Abstract{
                         type:req.body.type
                     })
 
-                }else{
+                } else{
                     let formDataLength = accordionDocument.allVersionData.length
 
                     if(formDataLength<2){
@@ -75,7 +76,7 @@ module.exports = class AccordionForCustomer extends Abstract{
                             returnNewDocument: true
                         })
 
-                    }else if(formDataLength === 2){
+                    } else if(formDataLength === 2){
 
                         accordionDocument.allVersionData[0] = accordionDocument.allVersionData[1]
                         accordionDocument.allVersionData.pop()
@@ -90,8 +91,6 @@ module.exports = class AccordionForCustomer extends Abstract{
                             returnNewDocument: true})
                     }
                 }
-
-       
 
                 result["adminId"] = resultingData.adminId;
                 result["companyName"] = resultingData.companyName;
