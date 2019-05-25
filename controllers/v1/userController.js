@@ -115,7 +115,7 @@ module.exports = class User extends Abstract{
             throw("Invalid email/Password")
         }
 
-        var token = jwt.sign({_id:userVerify._id,role:userVerify.role}, "PrivateKey",{
+        var token = jwt.sign({_id:userVerify._id,role:userVerify.role,companyName:userVerify.companyName}, "PrivateKey",{
             expiresIn: 60*60*24 
         });
 
