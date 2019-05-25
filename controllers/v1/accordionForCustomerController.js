@@ -38,6 +38,86 @@ module.exports = class AccordionForCustomer extends Abstract{
         })
     }
 
+       /**
+ * @api {post} {{url}}/test/api/v1/accordionForCustomer/edit Edit Form
+ * @apiGroup Accordion
+ * @apiHeader {String} X-authenticated-user-token Authentication token
+ * @apiParam (Request body) {String} allVersionData
+ * @apiParam (Request body) {String} adminId
+ * @apiParam (Request body) {String} companyName
+ *  @apiParam (Request body) {String} type
+   * @apiParamExample {json} Request-Body for edit:
+    *{
+    "allVersionData" : [
+    		{
+    				"id":1,
+    				"name":"Vogo2",
+    				"children":[
+    					{
+    						"id":2,
+    						"name":"A",
+    						"children":[
+    							{
+    								"name":"B",
+    								"id":4,
+    								"children":[
+    									{
+    									"name":"C",
+    									"id":8,
+    									"children":[]
+    								}
+    								]
+    							},
+    							{
+    								"name":"D",
+    								"id":5,
+    								"children":[
+    									{
+    									"name":"E",
+    									"id":9,
+    									"children":[]
+    									}
+    									]
+    							}
+    							]},
+                        {
+                        	"name":"F",
+    						"id":3,
+    						"children":[
+    							{
+    								"name":"G",
+    								"id":6,
+    								"children":[
+    									{
+    									"name":"H",
+    									"id":10,
+    									"children":[]
+    									}
+    									]
+    							},
+    							{
+    								"name":"I",
+    								"id":7,
+    								"children":[
+    									{
+    									"name":"J",
+    									"id":11,
+    									"children":[]
+    									}
+    									]
+    							}
+    							]
+    					}
+    					]
+    		}
+    ],
+    "adminId" : "5cdf8ecba8eb9ef95572416e",
+    "companyName" : "royal brother",
+    "type":"services"
+    
+    *}
+ */
+
     async edit(req){
         return new Promise(async (resolve,reject)=>{
             try{
@@ -110,6 +190,86 @@ module.exports = class AccordionForCustomer extends Abstract{
             }
         })
     }
+
+
+
+     /**
+ * @api {post} {{url}}/test/api/v1/accordionForCustomer/undo/5ce80cd1456a1600172000d7?type=services  Undo Form
+ * @apiGroup Accordion
+ * @apiHeader {String} X-authenticated-user-token Authentication token
+   * @apiParamExample {json} Listed Undo response:
+  {
+    "message": "Undo fetched successfully",
+    "status": 200,
+    "result": {
+        "adminId": "5cdf8ecba8eb9ef95572416e",
+        "companyName": "royal brother",
+        "type": "services",
+        "allVersionData": {
+            "id": 1,
+            "name": "Vogo",
+            "children": [
+                {
+                    "id": 2,
+                    "name": "A",
+                    "children": [
+                        {
+                            "name": "B",
+                            "id": 4,
+                            "children": [
+                                {
+                                    "name": "C",
+                                    "id": 8,
+                                    "children": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "D",
+                            "id": 5,
+                            "children": [
+                                {
+                                    "name": "E",
+                                    "id": 9,
+                                    "children": []
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "F",
+                    "id": 3,
+                    "children": [
+                        {
+                            "name": "G",
+                            "id": 6,
+                            "children": [
+                                {
+                                    "name": "H",
+                                    "id": 10,
+                                    "children": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "I",
+                            "id": 7,
+                            "children": [
+                                {
+                                    "name": "J",
+                                    "id": 11,
+                                    "children": []
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
+ */
 
     async undo(req){
         return new Promise(async (resolve,reject)=>{

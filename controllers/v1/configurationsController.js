@@ -24,7 +24,45 @@ module.exports = class Configurations extends Abstract{
         })
     }
 
-    
+              /**
+ * @api {get} {{url}}/test/api/v1/configurations/navigation  Navigation Links
+* @apiVersion 0.0.1
+* @apiGroup Navigation
+* @apiHeader {String} X-authenticated-user-token Authentication token
+*  @apiParamExample {json} Response:
+     
+* {
+
+    "message": "Configuration successfully fetched",
+    "status": 200,
+    "result": {
+        "tabActions": [
+            {
+                "name": "Super Admin Dashboard",
+                "id": "superAdmin",
+                "tabActions": [
+                    {
+                        "name": "Add Admin Credentials",
+                        "id": "addAdmin",
+                        "tabActions": []
+                    },
+                    {
+                        "name": "List Admin",
+                        "id": "listAdmin",
+                        "tabActions": []
+                    },
+                    {
+                        "name": "Create Admin Profile/Details",
+                        "id": "adminDetails",
+                        "tabActions": []
+                    }
+                ]
+            }
+        ]
+    }
+*}
+*/
+
     async navigation(req){
         return new Promise(async(resolve,reject)=>{
             try{

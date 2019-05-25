@@ -4,6 +4,54 @@ module.exports = class User extends Abstract{
         super(userSchema)
     }
 
+
+/**
+ * @api {post} {{url}}/test/api/v1/user/create  Create admin 
+ * @apiGroup Sign up Admin
+ * @apiParam (Request body) {String} companyName Name of the company
+ * @apiParam (Request body) {String} email company email
+ * @apiParam (Request body) {String} password 
+ * @apiParam (Request body) {String} role Role should be - admin 
+ * @apiParam (Request body) {String} createdAt Date at which this api is created
+ * @apiParam (Request body) {Object} userInformation userInformation Object consists of personOfContact and personOfContactEmail field
+ * @apiParamExample {json} Request-Body:
+    *{
+* "companyName":"royal brother",
+* "email":"customerExecutive@customer.com",
+* "password":"customer",
+* "role":"customerExecutive",
+* "userInformation":{
+* 	"personOfContact":Aman,
+*	"personOfContactEmail":"aman@gmail.com",
+* }
+    *}
+ * @apiDescription Api for creating admin
+ */
+
+ /**
+ * @api {post} {{url}}/test/api/v1/user/create  Create customerExecutive 
+ * @apiGroup Sign up Customer Executive
+ * @apiParam (Request body) {String} companyName  Name of the company
+ * @apiParam (Request body) {String} email  company email
+ * @apiParam (Request body) {String} password
+ * @apiParam (Request body) {String} role Role should be - customerExecutive
+ * @apiParam (Request body) {String} createdAt Date at which this api is created
+ * @apiParam (Request body) {Object} userInformation Object should have - employeeId,department-eg:billing,etc,firstName,lastName 
+  * @apiParamExample {json} Request-Body:
+    *{
+* "companyName":"royal brother",
+* "email":"customerExecutive@customer.com",
+* "password":"customer",
+* "role":"customerExecutive",
+* "userInformation":{
+* 	"employeeId":1234,
+*	"department":"Billing",
+*	"firstName":"Raunak",
+*	"lastName":"Ag"
+* }
+    *}
+ */
+
     async create(req){
         return new Promise(async (resolve,reject)=>{
             try{
@@ -36,6 +84,19 @@ module.exports = class User extends Abstract{
         })
     }
     
+
+     /**
+ * @api {post} {{url}}/test/api/v1/user/verify  Verify Admin/customerExecutive/superAdmin 
+ * @apiGroup Log In
+ * @apiParam (Request body) {String} email
+ * @apiParam (Request body) {String} password
+   * @apiParamExample {json} Request-Body:
+    *{
+* "email":"a@gmail.com",
+* "password":"*****",
+    *}
+ */
+
     async verify(req){
        
     return new Promise(async (resolve,reject)=>{
