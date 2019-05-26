@@ -1,10 +1,30 @@
 define({ "api": [
   {
     "type": "get",
-    "url": "{{url}}/test/api/v1/createDefaultForm/listDefaultForm/:id",
+    "url": "{{url}}/test/api/v1/createDefaultForm/listDefaultForm/:id?type=services",
     "title": "Create Default form for all admin",
     "version": "0.0.1",
     "group": "AccordionForm",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>if type is not there it will return default form</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response:",
+          "content": "{\n    \"message\": \"Default form fetched successfully\",\n    \"status\": 200,\n    \"result\": {\n        \"type\": \"defaultForm\",\n        \"formResult\": {\n            \"id\": 1,\n            \"name\": \"Default Form\",\n            \"children\": [\n                {\n                    \"id\": 2,\n                    \"name\": \"Default Parent1\",\n                    \"children\": [\n                        {\n                            \"id\": 4,\n                            \"name\": \"Default Children1\",\n                            \"children\": [\n                                {\n                                    \"id\": 8,\n                                    \"name\": \"Default sub-children1\",\n                                    \"children\": []\n                                }\n                            ]\n                        },\n                        {\n                            \"id\": 5,\n                            \"name\": \"Default Children2\",\n                            \"children\": [\n                                {\n                                    \"id\": 9,\n                                    \"name\": \"Default sub-children2\",\n                                    \"children\": []\n                                }\n                            ]\n                        }\n                    ]\n                },\n                {\n                    \"id\": 3,\n                    \"name\": \"Default Parent2\",\n                    \"children\": [\n                        {\n                            \"id\": 6,\n                            \"name\": \"Default Children3\",\n                            \"children\": [\n                                {\n                                    \"id\": 10,\n                                    \"name\": \"Default sub-children3\",\n                                    \"children\": []\n                                }\n                            ]\n                        },\n                        {\n                            \"id\": 7,\n                            \"name\": \"Default Children4\",\n                            \"children\": [\n                                {\n                                    \"id\": 11,\n                                    \"name\": \"Default sub-children4\",\n                                    \"children\": []\n                                }\n                            ]\n                        }\n                    ]\n                }\n            ]\n        }\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
     "header": {
       "fields": {
         "Header": [
@@ -18,18 +38,9 @@ define({ "api": [
         ]
       }
     },
-    "parameter": {
-      "examples": [
-        {
-          "title": "Response:",
-          "content": "{\n    \"message\": \"Default form fetched successfully\",\n    \"status\": 200,\n    \"result\": {\n        \"type\": \"defaultForm\",\n        \"formResult\": {\n            \"id\": 1,\n            \"name\": \"Default Form\",\n            \"children\": [\n                {\n                    \"id\": 2,\n                    \"name\": \"Default Parent1\",\n                    \"children\": [\n                        {\n                            \"id\": 4,\n                            \"name\": \"Default Children1\",\n                            \"children\": [\n                                {\n                                    \"id\": 8,\n                                    \"name\": \"Default sub-children1\",\n                                    \"children\": []\n                                }\n                            ]\n                        },\n                        {\n                            \"id\": 5,\n                            \"name\": \"Default Children2\",\n                            \"children\": [\n                                {\n                                    \"id\": 9,\n                                    \"name\": \"Default sub-children2\",\n                                    \"children\": []\n                                }\n                            ]\n                        }\n                    ]\n                },\n                {\n                    \"id\": 3,\n                    \"name\": \"Default Parent2\",\n                    \"children\": [\n                        {\n                            \"id\": 6,\n                            \"name\": \"Default Children3\",\n                            \"children\": [\n                                {\n                                    \"id\": 10,\n                                    \"name\": \"Default sub-children3\",\n                                    \"children\": []\n                                }\n                            ]\n                        },\n                        {\n                            \"id\": 7,\n                            \"name\": \"Default Children4\",\n                            \"children\": [\n                                {\n                                    \"id\": 11,\n                                    \"name\": \"Default sub-children4\",\n                                    \"children\": []\n                                }\n                            ]\n                        }\n                    ]\n                }\n            ]\n        }\n    }\n}",
-          "type": "json"
-        }
-      ]
-    },
     "filename": "controllers/v1/createDefaultFormController.js",
     "groupTitle": "AccordionForm",
-    "name": "GetUrlTestApiV1CreatedefaultformListdefaultformId"
+    "name": "GetUrlTestApiV1CreatedefaultformListdefaultformIdTypeServices"
   },
   {
     "type": "post",
