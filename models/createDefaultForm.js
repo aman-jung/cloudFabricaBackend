@@ -3,6 +3,8 @@ module.exports = {
     schema:{
         type:String,
         formResult:Array,
-        createdAt:Date    
+        createdAt:Date,
+        companyName:String,
+        adminId:"ObjectId"    
     }
 }
