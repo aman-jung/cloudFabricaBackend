@@ -5,9 +5,10 @@ module.exports = class CreateDefaultForm extends Abstract{
     }
 
           /**
- * @api {get} {{url}}/test/api/v1/createDefaultForm/listDefaultForm/:id  Create Default form for all admin
+ * @api {get} {{url}}/test/api/v1/createDefaultForm/listDefaultForm/:id?type=services  Create Default form for all admin
 * @apiVersion 0.0.1
 * @apiGroup AccordionForm
+* @apiParam {String} type if type is not there it will return default form
 * @apiHeader {String} X-authenticated-user-token Authentication token
 *  @apiParamExample {json} Response:
      
@@ -86,20 +87,25 @@ module.exports = class CreateDefaultForm extends Abstract{
         return new Promise(async (resolve,reject)=>{
             try{
 
-                let defaultFormDocument = await database.models.createDefaultForm.findOne({
-                    adminId:req.params.id
-                }).lean()
-
-                let result 
-                if(!defaultFormDocument){
+                let result
+                if(!req.query.type){
                     
                     let defaultDocuments = await database.models.createDefaultForm.findOne({
                         type:"defaultForm"
                     }).lean()
 
                     result = _.omit(defaultDocuments,"_id");
+
                 }else{
-                    result = defaultFormDocument.formResult[defaultFormDocument.formResult.length-1]
+
+                    let defaultFormDocument = await database.models.createDefaultForm.findOne({
+                        adminId:req.params.id,
+                        type:req.query.type
+                    }).lean()
+
+                    let resultingData = {}
+                    resultingData["formResult"] = defaultFormDocument.formResult[defaultFormDocument.formResult.length-1]
+                    result = resultingData
                 }
                 
 
