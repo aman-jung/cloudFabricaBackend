@@ -108,73 +108,9 @@
   },
   {
     "type": "post",
-    "url": "{{url}}/test/api/v1/accordionForCustomer/edit",
-    "title": "Edit Form",
-    "group": "Accordion",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "X-authenticated-user-token",
-            "description": "<p>Authentication token</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Request body": [
-          {
-            "group": "Request body",
-            "type": "String",
-            "optional": false,
-            "field": "allVersionData",
-            "description": ""
-          },
-          {
-            "group": "Request body",
-            "type": "String",
-            "optional": false,
-            "field": "adminId",
-            "description": ""
-          },
-          {
-            "group": "Request body",
-            "type": "String",
-            "optional": false,
-            "field": "companyName",
-            "description": ""
-          },
-          {
-            "group": "Request body",
-            "type": "String",
-            "optional": false,
-            "field": "type",
-            "description": ""
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Request-Body for edit:",
-          "content": "{\n    \"allVersionData\" : [\n    \t\t{\n    \t\t\t\t\"id\":1,\n    \t\t\t\t\"name\":\"Vogo2\",\n    \t\t\t\t\"children\":[\n    \t\t\t\t\t{\n    \t\t\t\t\t\t\"id\":2,\n    \t\t\t\t\t\t\"name\":\"A\",\n    \t\t\t\t\t\t\"children\":[\n    \t\t\t\t\t\t\t{\n    \t\t\t\t\t\t\t\t\"name\":\"B\",\n    \t\t\t\t\t\t\t\t\"id\":4,\n    \t\t\t\t\t\t\t\t\"children\":[\n    \t\t\t\t\t\t\t\t\t{\n    \t\t\t\t\t\t\t\t\t\"name\":\"C\",\n    \t\t\t\t\t\t\t\t\t\"id\":8,\n    \t\t\t\t\t\t\t\t\t\"children\":[]\n    \t\t\t\t\t\t\t\t}\n    \t\t\t\t\t\t\t\t]\n    \t\t\t\t\t\t\t},\n    \t\t\t\t\t\t\t{\n    \t\t\t\t\t\t\t\t\"name\":\"D\",\n    \t\t\t\t\t\t\t\t\"id\":5,\n    \t\t\t\t\t\t\t\t\"children\":[\n    \t\t\t\t\t\t\t\t\t{\n    \t\t\t\t\t\t\t\t\t\"name\":\"E\",\n    \t\t\t\t\t\t\t\t\t\"id\":9,\n    \t\t\t\t\t\t\t\t\t\"children\":[]\n    \t\t\t\t\t\t\t\t\t}\n    \t\t\t\t\t\t\t\t\t]\n    \t\t\t\t\t\t\t}\n    \t\t\t\t\t\t\t]},\n                        {\n                        \t\"name\":\"F\",\n    \t\t\t\t\t\t\"id\":3,\n    \t\t\t\t\t\t\"children\":[\n    \t\t\t\t\t\t\t{\n    \t\t\t\t\t\t\t\t\"name\":\"G\",\n    \t\t\t\t\t\t\t\t\"id\":6,\n    \t\t\t\t\t\t\t\t\"children\":[\n    \t\t\t\t\t\t\t\t\t{\n    \t\t\t\t\t\t\t\t\t\"name\":\"H\",\n    \t\t\t\t\t\t\t\t\t\"id\":10,\n    \t\t\t\t\t\t\t\t\t\"children\":[]\n    \t\t\t\t\t\t\t\t\t}\n    \t\t\t\t\t\t\t\t\t]\n    \t\t\t\t\t\t\t},\n    \t\t\t\t\t\t\t{\n    \t\t\t\t\t\t\t\t\"name\":\"I\",\n    \t\t\t\t\t\t\t\t\"id\":7,\n    \t\t\t\t\t\t\t\t\"children\":[\n    \t\t\t\t\t\t\t\t\t{\n    \t\t\t\t\t\t\t\t\t\"name\":\"J\",\n    \t\t\t\t\t\t\t\t\t\"id\":11,\n    \t\t\t\t\t\t\t\t\t\"children\":[]\n    \t\t\t\t\t\t\t\t\t}\n    \t\t\t\t\t\t\t\t\t]\n    \t\t\t\t\t\t\t}\n    \t\t\t\t\t\t\t]\n    \t\t\t\t\t}\n    \t\t\t\t\t]\n    \t\t}\n    ],\n    \"adminId\" : \"5cdf8ecba8eb9ef95572416e\",\n    \"companyName\" : \"royal brother\",\n    \"type\":\"services\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/v1/accordionForCustomerController.js",
-    "groupTitle": "Accordion",
-    "name": "PostUrlTestApiV1AccordionforcustomerEdit"
-  },
-  {
-    "type": "post",
-    "url": "{{url}}/test/api/v1/accordionForCustomer/undo/5ce80cd1456a1600172000d7?type=services",
+    "url": "{{url}}/test/api/v1/createDefaultForm/undo/:adminId?type=services",
     "title": "Undo Form",
-    "group": "Accordion",
+    "group": "AccordionForm",
     "header": {
       "fields": {
         "Header": [
@@ -198,9 +134,9 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/v1/accordionForCustomerController.js",
-    "groupTitle": "Accordion",
-    "name": "PostUrlTestApiV1AccordionforcustomerUndo5ce80cd1456a1600172000d7TypeServices"
+    "filename": "controllers/v1/createDefaultFormController.js",
+    "groupTitle": "AccordionForm",
+    "name": "PostUrlTestApiV1CreatedefaultformUndoAdminidTypeServices"
   },
   {
     "type": "get",

@@ -88,6 +88,7 @@ module.exports = class CreateDefaultForm extends Abstract{
             try{
 
                 let result
+
                 if(!req.query.type){
                     
                     let defaultDocuments = await database.models.createDefaultForm.findOne({
@@ -269,6 +270,120 @@ module.exports = class CreateDefaultForm extends Abstract{
 
             }
             catch(error){
+                return reject({
+                    message:error
+                })
+            }
+        })
+    }
+
+        /**
+ * @api {post} {{url}}/test/api/v1/createDefaultForm/undo/:adminId?type=services  Undo Form
+ * @apiGroup AccordionForm
+ * @apiHeader {String} X-authenticated-user-token Authentication token
+   * @apiParamExample {json} Listed Undo response:
+  {
+    "message": "Undo fetched successfully",
+    "status": 200,
+    "result": {
+        "adminId": "5cdf8ecba8eb9ef95572416e",
+        "companyName": "royal brother",
+        "type": "services",
+        "allVersionData": {
+            "id": 1,
+            "name": "Vogo",
+            "children": [
+                {
+                    "id": 2,
+                    "name": "A",
+                    "children": [
+                        {
+                            "name": "B",
+                            "id": 4,
+                            "children": [
+                                {
+                                    "name": "C",
+                                    "id": 8,
+                                    "children": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "D",
+                            "id": 5,
+                            "children": [
+                                {
+                                    "name": "E",
+                                    "id": 9,
+                                    "children": []
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "F",
+                    "id": 3,
+                    "children": [
+                        {
+                            "name": "G",
+                            "id": 6,
+                            "children": [
+                                {
+                                    "name": "H",
+                                    "id": 10,
+                                    "children": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "I",
+                            "id": 7,
+                            "children": [
+                                {
+                                    "name": "J",
+                                    "id": 11,
+                                    "children": []
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
+ */
+
+    async undo(req){
+        return new Promise(async (resolve,reject)=>{
+            try{
+
+                if(!req.params.id && !req.query.type){
+                    throw "Params is required"
+                }
+
+                let accordionForCustomerDocument = await database.models.createDefaultForm.findOne({
+                    adminId:req.params.id,
+                    type:req.query.type
+                }).lean()
+
+                if(!accordionForCustomerDocument){
+                    throw "No Accordion found for given params"
+                } else{
+
+                    let result = {}
+                    result["adminId"] = accordionForCustomerDocument.adminId;
+                    result["companyName"] = accordionForCustomerDocument.companyName;
+                    result["type"] = accordionForCustomerDocument.type;
+                    result["formResult"] = accordionForCustomerDocument.formResult[0]
+
+                    return resolve({
+                        message:"Undo fetched successfully",
+                        result:result    
+                    })
+                }
+            } catch(error){
                 return reject({
                     message:error
                 })
