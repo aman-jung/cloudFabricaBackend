@@ -7,7 +7,7 @@ module.exports = class CreateDefaultForm extends Abstract{
           /**
  * @api {get} {{url}}/test/api/v1/createDefaultForm/listDefaultForm/:id  Create Default form for all admin
 * @apiVersion 0.0.1
-* @apiGroup AccordionForm based on adminId
+* @apiGroup AccordionForm
 * @apiHeader {String} X-authenticated-user-token Authentication token
 *  @apiParamExample {json} Response:
      
