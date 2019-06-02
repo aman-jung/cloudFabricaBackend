@@ -1,5 +1,3 @@
-let customerExecutiveFormHelper = require(ROOT+"/module/customerExecutive/helper") 
-
 module.exports = class CreateDefaultForm extends Abstract{
     
     constructor(){
