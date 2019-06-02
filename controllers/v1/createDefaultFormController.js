@@ -89,7 +89,7 @@ module.exports = class CreateDefaultForm extends Abstract{
 
                 let result
 
-                if(!req.query.type){
+                if(!req.query.type && req.params.id){
                     
                     let defaultDocuments = await database.models.createDefaultForm.findOne({
                         type:"defaultForm"
