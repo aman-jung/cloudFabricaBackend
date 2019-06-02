@@ -448,14 +448,20 @@ module.exports = class CreateDefaultForm extends Abstract{
                         if(formData.children.length>0){
                             
                             formData.children.forEach(eachChildren=>{
-                                childrenValue.push(_.omit(eachChildren,"children"))
+
+                                let childrenObject = {}
+                                childrenObject["label"] = eachChildren.name;
+                                childrenObject["value"] = eachChildren.id;
+
+                                childrenValue.push(childrenObject)
+                                // childrenValue.push(_.omit(eachChildren,"children"))
                             })
             
                         } else{
                             
                             childrenValue.push({
-                                name:formData.name,
-                                id:formData.id
+                                label:formData.name,
+                                value:formData.id
                             })
                         }
             
@@ -476,7 +482,12 @@ module.exports = class CreateDefaultForm extends Abstract{
                     let children= []
 
                     currentData.children.forEach(eachChildren=>{
-                        children.push(_.omit(eachChildren,"children"))
+                        let childrenObject = {}
+
+                        childrenObject["label"] = eachChildren.name;
+                        childrenObject["value"] = eachChildren.id;
+
+                        children.push(childrenObject)
                     })
                     result["immediateData"] = children
                 } else{
