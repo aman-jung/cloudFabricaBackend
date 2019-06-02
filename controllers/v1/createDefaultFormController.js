@@ -1,3 +1,5 @@
+let customerExecutiveFormHelper = require(ROOT+"/module/customerExecutive/helper") 
+
 module.exports = class CreateDefaultForm extends Abstract{
     
     constructor(){
@@ -387,6 +389,111 @@ module.exports = class CreateDefaultForm extends Abstract{
                 return reject({
                     message:error
                 })
+            }
+        })
+    }
+
+            /**
+ * @api {post} {{url}}/test/api/v1/createDefaultForm/listCustomerExecutiveForm?adminId=5cdf8ecba8eb9ef95572416e&companyName=royal&type=services&id=4  listCustomerExecutiveForm
+ * @apiGroup AccordionForm
+ * @apiHeader {String} X-authenticated-user-token Authentication token
+   * @apiParamExample {json} Listed Undo response:
+   * {
+    "message": "Customer executive form executed successfully",
+    "status": 200,
+    "result": {
+        "immediateData": [
+            {
+                "name": "C",
+                "id": 8
+            }
+        ]
+    }
+}
+*@apiDescription If id is not given it will by default return all parents.
+ */
+
+    async listCustomerExecutiveForm(req){
+
+        return new Promise(async (resolve,reject)=>{
+            try{
+
+                let result={}
+
+                if(!req.query.companyName ){
+                    throw "company name is required"
+                }
+
+                if(!req.query.adminId ){
+                    throw "admin Id is required"
+                }
+
+                if(!req.query.type){
+                    throw "type of services is required"
+                }
+
+                let resultingData = await database.models.createDefaultForm.findOne({
+                    adminId:req.query.adminId,
+                    companyName:req.query.companyName,
+                    type:req.query.type
+                },{formResult:1}).lean()
+
+                let currentData = resultingData.formResult[resultingData.formResult.length-1]
+                let childrenValue = []
+
+                function customerExecutiveHelperForm(formData,id){
+
+                    // let children = [] 
+            
+                    if(formData.id === id){
+            
+                        if(formData.children.length>0){
+                            
+                            formData.children.forEach(eachChildren=>{
+                                childrenValue.push(_.omit(eachChildren,"children"))
+                            })
+            
+                        } else{
+                            
+                            childrenValue.push({
+                                name:formData.name,
+                                id:formData.id
+                            })
+                        }
+            
+                        return childrenValue;
+                    } else{
+            
+                        if(formData.children.length>0){
+                            formData.children.forEach(eachChildren=>{
+                                customerExecutiveHelperForm(eachChildren,id)
+                            })
+                        }
+                    }
+            
+                }
+
+                if(!req.query.id){
+
+                    let children= []
+
+                    currentData.children.forEach(eachChildren=>{
+                        children.push(_.omit(eachChildren,"children"))
+                    })
+                    result["immediateData"] = children
+                } else{
+
+                    customerExecutiveHelperForm(currentData,parseInt(req.query.id))
+                    result["immediateData"] = childrenValue
+                }
+
+                return resolve({
+                    message:"Customer executive form executed successfully",
+                    result:result
+                })
+            }
+            catch(error){
+                console.log(error)
             }
         })
     }

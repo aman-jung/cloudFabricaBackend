@@ -108,6 +108,39 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "{{url}}/test/api/v1/createDefaultForm/listCustomerExecutiveForm?adminId=5cdf8ecba8eb9ef95572416e&companyName=royal&type=services&id=4",
+    "title": "listCustomerExecutiveForm",
+    "group": "AccordionForm",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-authenticated-user-token",
+            "description": "<p>Authentication token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Listed Undo response:",
+          "content": "{\n    \"message\": \"Customer executive form executed successfully\",\n    \"status\": 200,\n    \"result\": {\n        \"immediateData\": [\n            {\n                \"name\": \"C\",\n                \"id\": 8\n            }\n        ]\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "description": "<p>If id is not given it will by default return all parents.</p>",
+    "version": "0.0.0",
+    "filename": "controllers/v1/createDefaultFormController.js",
+    "groupTitle": "AccordionForm",
+    "name": "PostUrlTestApiV1CreatedefaultformListcustomerexecutiveformAdminid5cdf8ecba8eb9ef95572416eCompanynameRoyalTypeServicesId4"
+  },
+  {
+    "type": "post",
     "url": "{{url}}/test/api/v1/createDefaultForm/undo/:adminId?type=services",
     "title": "Undo Form",
     "group": "AccordionForm",
