@@ -457,13 +457,15 @@ module.exports = class CreateDefaultForm extends Abstract{
                                 // childrenValue.push(_.omit(eachChildren,"children"))
                             })
             
-                        } else{
+                        } 
+                        
+                        // else{
                             
-                            childrenValue.push({
-                                label:formData.name,
-                                value:formData.id
-                            })
-                        }
+                        //     childrenValue.push({
+                        //         label:formData.name,
+                        //         value:formData
+                        //     })
+                        // }
             
                         return childrenValue;
                     } else{
