@@ -479,7 +479,7 @@ module.exports = class CreateDefaultForm extends Abstract{
             
                 }
 
-                if(!req.query.id){
+                if(req.query.id === ""){
 
                     let children= []
 
