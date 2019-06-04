@@ -434,5 +434,43 @@ define({ "api": [
     "filename": "controllers/v1/superAdminController.js",
     "groupTitle": "Super_Admin",
     "name": "GetUrlTestApiV1SuperadminListadmin"
+  },
+  {
+    "type": "post",
+    "url": "{{url}}/test/api/v1/submissions/make",
+    "title": "make submission",
+    "group": "submissions",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-authenticated-user-token",
+            "description": "<p>Authentication token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "body response:",
+          "content": " {\n\t\"id\":[2,4]\n}",
+          "type": "json"
+        },
+        {
+          "title": "Listed submission response:",
+          "content": "   {\n    \"message\": \"Submissions saved successfully\",\n    \"status\": 200,\n    \"result\": {\n        \"submissions\": [\n            {\n                \"name\": \"A\",\n                \"id\": 2,\n                \"hierarchyLevel\": 0\n            },\n            {\n                \"name\": \"B\",\n                \"id\": 4,\n                \"hierarchyLevel\": 1\n            }\n        ],\n        \"_id\": \"5cf644a37602972b50f3711b\",\n        \"userDetails\": {\n            \"submittedBy\": 1234,\n            \"Department\": \"services\",\n            \"fName\": \"Raunak\",\n            \"lName\": \"Ag\",\n            \"adminId\": \"5cdf8ecba8eb9ef95572416e\"\n        },\n        \"createdAt\": \"2019-06-04T10:14:55.931Z\",\n        \"__v\": 0\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "description": "<p>If id is not given it will throw you an error.</p>",
+    "version": "0.0.0",
+    "filename": "controllers/v1/submissionsController.js",
+    "groupTitle": "submissions",
+    "name": "PostUrlTestApiV1SubmissionsMake"
   }
 ] });
