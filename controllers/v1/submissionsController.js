@@ -1,3 +1,5 @@
+let submissionsHelper = require(ROOT+"/module/submissions/helper");
+
 module.exports = class Submissions extends Abstract{
     
     constructor(){
@@ -270,34 +272,8 @@ module.exports = class Submissions extends Abstract{
                     type:req.query.type
                 },{formResult:1,adminId:1}).lean()
 
-                let allFormValue = {}
 
-                function defaultForm(formData){
-
-                    if(formData.children.length>0){
-                        
-                        formData.children.forEach(eachChildren=>{
-
-                            allFormValue[eachChildren.name] ={
-                                score:0
-                            }
-
-                            defaultForm(eachChildren)
-                        })
-
-                    }else{
-
-                        if(formData.id !== 1){
-                            allFormValue[formData.name] ={
-                                score:0
-                            }
-                        }
-
-                    }
-
-                }
-
-                defaultForm(editedForm.formResult[editedForm.formResult.length-1])
+                let allFormValue = submissionsHelper.defaultForm(editedForm.formResult[editedForm.formResult.length-1])
 
                 let submissionsDocuments = await database.models.submissions.find({
                     "userDetails.adminId":editedForm.adminId
