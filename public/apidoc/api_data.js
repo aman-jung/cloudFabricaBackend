@@ -436,6 +436,72 @@ define({ "api": [
     "name": "GetUrlTestApiV1SuperadminListadmin"
   },
   {
+    "type": "get",
+    "url": "{{url}}/test/api/v1/listSubmissions/:adminId",
+    "title": "List Table data",
+    "group": "submissions",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-authenticated-user-token",
+            "description": "<p>Authentication token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Listed submission response:",
+          "content": "{\n    \"status\": 200,\n    \"result\": [\n        {\n            \"data\": [\n                {\n                    \"name\": \"A\",\n                    \"id\": 2,\n                    \"hierarchyLevel\": 0,\n                    \"label\": \"parent\"\n                },\n                {\n                    \"name\": \"B\",\n                    \"id\": 4,\n                    \"hierarchyLevel\": 1,\n                    \"label\": \"children1\"\n                }\n            ],\n            \"table\": true,\n            \"submittedBy\": 1234,\n            \"Department\": \"services\",\n            \"fName\": \"Raunak\",\n            \"lName\": \"Ag\"\n        }\n    ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "description": "<p>adminId is mandatory.</p>",
+    "version": "0.0.0",
+    "filename": "controllers/v1/submissionsController.js",
+    "groupTitle": "submissions",
+    "name": "GetUrlTestApiV1ListsubmissionsAdminid"
+  },
+  {
+    "type": "get",
+    "url": "{{url}}/test/api/v1/submissions/submissionDrillDown/:adminId?type=services",
+    "title": "Graph submissions",
+    "group": "submissions",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-authenticated-user-token",
+            "description": "<p>Authentication token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Listed submission response:",
+          "content": "{\n    \"message\": \"Data for graph fetched successfully\",\n    \"status\": 200,\n    \"result\": {\n        \"data\": [\n            {\n                \"name\": \"A\",\n                \"score\": 2\n            },\n            {\n                \"name\": \"B\",\n                \"score\": 2\n            }\n        ],\n        \"graphData\": true\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "description": "<p>adminId is mandatory.</p>",
+    "version": "0.0.0",
+    "filename": "controllers/v1/submissionsController.js",
+    "groupTitle": "submissions",
+    "name": "GetUrlTestApiV1SubmissionsSubmissiondrilldownAdminidTypeServices"
+  },
+  {
     "type": "post",
     "url": "{{url}}/test/api/v1/submissions/make",
     "title": "make submission",

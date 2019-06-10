@@ -130,4 +130,236 @@ module.exports = class Submissions extends Abstract{
         })
     }
 
+                   /**
+ * @api {get} {{url}}/test/api/v1/listSubmissions/:adminId List Table data
+ * @apiGroup submissions
+ * @apiHeader {String} X-authenticated-user-token Authentication token
+* @apiParamExample {json} Listed submission response:
+{
+    "status": 200,
+    "result": [
+        {
+            "data": [
+                {
+                    "name": "A",
+                    "id": 2,
+                    "hierarchyLevel": 0,
+                    "label": "parent"
+                },
+                {
+                    "name": "B",
+                    "id": 4,
+                    "hierarchyLevel": 1,
+                    "label": "children1"
+                }
+            ],
+            "table": true,
+            "submittedBy": 1234,
+            "Department": "services",
+            "fName": "Raunak",
+            "lName": "Ag"
+        }
+    ]
+}
+*@apiDescription adminId is mandatory.
+ */
+ 
+    async listSubmissions(req){
+        return new Promise(async (resolve,reject)=>{
+
+            try{
+
+                if(!req.params.id){
+                    throw "Admin id is mandatory"
+                }
+
+               let submissionDocuments = await database.models.submissions.find({
+                "userDetails.adminId":ObjectId(req.params.id)
+               },{_id:1}).lean()
+
+               let chunkOfSubmissionDocument = _.chunk(submissionDocuments,10);
+               let submissionIds
+               let submissionsData
+               let results = []
+
+               for(let pointerToSubmissions=0;pointerToSubmissions<chunkOfSubmissionDocument.length;pointerToSubmissions++){
+                   
+                submissionIds = chunkOfSubmissionDocument[pointerToSubmissions].map(eachSubmissionData=>{
+                       return eachSubmissionData._id
+                   })
+
+                submissionsData = await database.models.submissions.find({
+                    _id:{$in:submissionIds}
+                },{_id:0,__v:0}).lean()
+
+                await Promise.all(submissionsData.map(async eachSubmissionData=>{
+                    let submissions = {}
+                    submissions["data"] = []
+                    submissions["table"] = true
+
+                    Object.keys(eachSubmissionData.userDetails).forEach(eachUserCredentials=>{
+                        if(["adminId"].indexOf(eachUserCredentials) == -1){
+                            submissions[eachUserCredentials] = eachSubmissionData.userDetails[eachUserCredentials]
+                        }
+                    })
+
+                    eachSubmissionData.submissions[0]["label"] = "parent"
+
+                    submissions.data.push(eachSubmissionData.submissions[0])
+
+                    for(let pointerToSubmissions = 1;pointerToSubmissions<eachSubmissionData.submissions.length;pointerToSubmissions++){
+                        eachSubmissionData.submissions[pointerToSubmissions]["label"] = "children"+pointerToSubmissions;
+                        submissions.data.push(eachSubmissionData.submissions[pointerToSubmissions])
+                    }
+
+                    results.push(submissions)
+
+                }))
+
+               }
+
+               return resolve({
+                result:results
+                })
+
+
+            } catch(error){
+                return reject({
+                    message:error
+                })
+            }
+        })
+    }
+
+                   /**
+ * @api {get} {{url}}/test/api/v1/submissions/submissionDrillDown/:adminId?type=services Graph submissions
+ * @apiGroup submissions
+ * @apiHeader {String} X-authenticated-user-token Authentication token
+* @apiParamExample {json} Listed submission response:
+{
+    "message": "Data for graph fetched successfully",
+    "status": 200,
+    "result": {
+        "data": [
+            {
+                "name": "A",
+                "score": 2
+            },
+            {
+                "name": "B",
+                "score": 2
+            }
+        ],
+        "graphData": true
+    }
+}
+*@apiDescription adminId is mandatory.
+ */
+
+    async submissionDrillDown(req){
+        return new Promise(async (resolve,reject)=>{
+
+            try{
+
+                if(!req.params.id){
+                    throw "Admin id is required"
+                }
+
+                let editedForm = await database.models.createDefaultForm.findOne({
+                    adminId:ObjectId(req.params.id),
+                    type:req.query.type
+                },{formResult:1,adminId:1}).lean()
+
+                let allFormValue = {}
+
+                function defaultForm(formData){
+
+                    if(formData.children.length>0){
+                        
+                        formData.children.forEach(eachChildren=>{
+
+                            allFormValue[eachChildren.name] ={
+                                score:0
+                            }
+
+                            defaultForm(eachChildren)
+                        })
+
+                    }else{
+
+                        if(formData.id !== 1){
+                            allFormValue[formData.name] ={
+                                score:0
+                            }
+                        }
+
+                    }
+
+                }
+
+                defaultForm(editedForm.formResult[editedForm.formResult.length-1])
+
+                let submissionsDocuments = await database.models.submissions.find({
+                    "userDetails.adminId":editedForm.adminId
+                },{_id:1}).lean()
+
+                if(!submissionsDocuments.length>0){
+                    throw "Submissions is not there"
+                }
+
+                let chunkOfSubmissionDocument = _.chunk(submissionsDocuments,10);
+                let submissionIds;
+                let submissionDocuments
+                let results = {}
+                results["data"] = []
+
+                results.graphData=true
+                
+                for(let pointerToSubmissions=0;pointerToSubmissions<chunkOfSubmissionDocument.length;pointerToSubmissions++){
+
+                    submissionIds = chunkOfSubmissionDocument[pointerToSubmissions].map(eachSubmissionModel=>{
+                        return eachSubmissionModel._id
+                    })
+
+                    submissionDocuments = await database.models.submissions.find({
+                        _id:{$in:submissionIds}
+                    },{submissions:1}).lean()
+
+                    await Promise.all(submissionDocuments.map(async eachSubmissionDocument=>{
+
+                        for(let pointerToEachSubmissionData=0;pointerToEachSubmissionData<eachSubmissionDocument.submissions.length;pointerToEachSubmissionData++){
+                            let singleSubmission = eachSubmissionDocument.submissions[pointerToEachSubmissionData]
+
+                            if(allFormValue[singleSubmission.name]){
+                                allFormValue[singleSubmission.name].score +=1;
+                            }
+                        }
+
+                    }))
+                }
+
+                Object.keys(allFormValue).forEach(eachFormData=>{
+                            
+                    if(allFormValue[eachFormData].score !== 0){
+                        results.data.push({
+                            name:eachFormData,
+                            score:allFormValue[eachFormData].score
+                        })
+                    }
+
+                })
+
+                return resolve({
+                    message:"Data for graph fetched successfully",
+                    result:results
+                })
+
+            } catch(error){
+                return reject({
+                    message:error
+                })
+            }
+        })
+    }
+
 }
