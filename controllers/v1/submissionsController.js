@@ -56,13 +56,13 @@ module.exports = class Submissions extends Abstract{
                     throw "Id is required."
                 } else{
 
-                //    let userDocuments = await database.models.user.findOne({
-                //        _id:req.userDetails._id
-                //    },{userInformation:1,companyName:1,email:1}).lean()
+                   let userDocuments = await database.models.user.findOne({
+                       _id:req.userDetails._id
+                   },{userInformation:1,companyName:1,email:1}).lean()
 
-                //    if(!userDocuments){
-                //        throw "User is not present in database"
-                //    } else{
+                   if(!userDocuments){
+                       throw "User is not present in database"
+                   } else{
 
                     let childrenValue = []
 
@@ -88,10 +88,10 @@ module.exports = class Submissions extends Abstract{
                     }
                     
                     let resultDocument = await database.models.createDefaultForm.findOne({
-                        // adminId:userDocuments.userInformation.adminId,
-                        // type:userDocuments.userInformation.Department,
-                        // companyName:userDocuments.companyName
-                        companyName:req.query.companyName
+                        adminId:userDocuments.userInformation.adminId,
+                        type:userDocuments.userInformation.Department,
+                        companyName:userDocuments.companyName
+                        // companyName:req.query.companyName
                     },{"formResult":1}).lean()
 
                     let currentEditedForm = resultDocument.formResult[resultDocument.formResult.length-1]
@@ -102,13 +102,13 @@ module.exports = class Submissions extends Abstract{
                     }
 
                     let submissionObject = {
-                        // userDetails:{
-                        //     submittedBy:userDocuments.userInformation["Employee Id"],
-                        //     Department:userDocuments.userInformation.Department,
-                        //     fName:userDocuments.userInformation["First Name"],
-                        //     lName:userDocuments.userInformation["Last Name"],
-                        //     adminId:userDocuments.userInformation.adminId
-                        // },
+                        userDetails:{
+                            submittedBy:userDocuments.userInformation["Employee Id"],
+                            Department:userDocuments.userInformation.Department,
+                            fName:userDocuments.userInformation["First Name"],
+                            lName:userDocuments.userInformation["Last Name"],
+                            adminId:userDocuments.userInformation.adminId
+                        },
                         submissions:childrenValue,
                         createdAt:new Date()
                     }
@@ -120,7 +120,7 @@ module.exports = class Submissions extends Abstract{
                         result:submissionDocument
                     })
                    }
-                // }
+                }
 
             } catch(error){
 
