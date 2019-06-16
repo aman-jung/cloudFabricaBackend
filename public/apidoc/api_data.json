@@ -172,6 +172,76 @@
     "name": "PostUrlTestApiV1CreatedefaultformUndoAdminidTypeServices"
   },
   {
+    "type": "post",
+    "url": "{{url}}/test/api/v1/formManagement/createAdminForm",
+    "title": "create admin form",
+    "group": "Form",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-authenticated-user-token",
+            "description": "<p>Authentication token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Body Params:",
+          "content": "{\n\t\"type\":\"Services\",\n\t\"adminId\":\"5cdf8ecba8eb9ef95572416e\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "response:",
+          "content": "   {\n    \"message\": \"Form Created Successfully\",\n    \"status\": 200,\n    \"result\": {\n        \"_id\": \"5d0617531f44a462d538dd16\",\n        \"type\": \"Billing\",\n        \"adminId\": \"5cdf8ecba8eb9ef95572416e\",\n        \"__v\": 0\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "description": "<p>If same type is submitted for the particular admin then it will throw an error</p>",
+    "version": "0.0.0",
+    "filename": "controllers/v1/formManagementController.js",
+    "groupTitle": "Form",
+    "name": "PostUrlTestApiV1FormmanagementCreateadminform"
+  },
+  {
+    "type": "post",
+    "url": "{{url}}/test/api/v1/formManagement/listAdminForm?adminId",
+    "title": "List admin form",
+    "group": "Form",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-authenticated-user-token",
+            "description": "<p>Authentication token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "response:",
+          "content": "   {\n    \"message\": \"Form Listed Successfully\",\n    \"status\": 200,\n    \"result\": [\n        {\n            \"type\": \"Billing\"\n        }\n    ]\n}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/v1/formManagementController.js",
+    "groupTitle": "Form",
+    "name": "PostUrlTestApiV1FormmanagementListadminformAdminid"
+  },
+  {
     "type": "get",
     "url": "{{url}}/test/api/v1/admin/listCustomerExecutive?companyName=airtel",
     "title": "List Customer Executive",
