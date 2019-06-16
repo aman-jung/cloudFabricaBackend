@@ -107,10 +107,15 @@ module.exports = class CreateDefaultForm extends Abstract {
           result = _.omit(defaultDocuments, "_id");
         } else {
           let resultingData = {};
-          resultingData["formResult"] =
-            createDefaultFormDocuments.formResult[
-              createDefaultFormDocuments.formResult.length - 1
-            ];
+
+          if (createDefaultFormDocuments.formResult.length < 0) {
+            resultingData["formResult"] = {};
+          } else {
+            resultingData["formResult"] =
+              createDefaultFormDocuments.formResult[
+                createDefaultFormDocuments.formResult.length - 1
+              ];
+          }
           result = resultingData;
         }
 
