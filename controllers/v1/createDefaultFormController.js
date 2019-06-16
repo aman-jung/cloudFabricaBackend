@@ -1,14 +1,12 @@
-module.exports = class CreateDefaultForm extends Abstract{
-    
-    constructor(){
-        super(createDefaultFormSchema)
-    }
+module.exports = class CreateDefaultForm extends Abstract {
+  constructor() {
+    super(createDefaultFormSchema);
+  }
 
-          /**
- * @api {get} {{url}}/test/api/v1/createDefaultForm/listDefaultForm/:id?type=services  Create Default form for all admin
+  /**
+ * @api {get} {{url}}/test/api/v1/createDefaultForm/listDefaultForm?adminId=5cdf8ecba8eb9ef95572416f&type=services  Create Default form for all admin
 * @apiVersion 0.0.1
 * @apiGroup AccordionForm
-* @apiParam {String} type if type is not there it will return default form
 * @apiHeader {String} X-authenticated-user-token Authentication token
 *  @apiParamExample {json} Response:
      
@@ -83,48 +81,52 @@ module.exports = class CreateDefaultForm extends Abstract{
 *}
 */
 
-    async listDefaultForm(req){
-        return new Promise(async (resolve,reject)=>{
-            try{
+  async listDefaultForm(req) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let result;
 
-                let result
+        if (!req.query.type || !req.query.adminId) {
+          throw "Type/AdminId is required";
+        }
 
-                if(!req.query.type && !req.params.id){
-                    
-                    let defaultDocuments = await database.models.createDefaultForm.findOne({
-                        type:"defaultForm"
-                    }).lean()
+        let createDefaultFormDocuments = await database.models.createDefaultForm
+          .findOne({
+            type: req.query.type,
+            adminId: req.query.adminId
+          })
+          .lean();
 
-                    result = _.omit(defaultDocuments,"_id");
+        if (!createDefaultFormDocuments) {
+          let defaultDocuments = await database.models.createDefaultForm
+            .findOne({
+              type: "defaultForm"
+            })
+            .lean();
 
-                }else{
+          result = _.omit(defaultDocuments, "_id");
+        } else {
+          let resultingData = {};
+          resultingData["formResult"] =
+            createDefaultFormDocuments.formResult[
+              createDefaultFormDocuments.formResult.length - 1
+            ];
+          result = resultingData;
+        }
 
-                    let defaultFormDocument = await database.models.createDefaultForm.findOne({
-                        adminId:req.params.id,
-                        type:req.query.type
-                    }).lean()
+        return resolve({
+          message: "Default form fetched successfully",
+          result: result
+        });
+      } catch (error) {
+        return reject({
+          message: error
+        });
+      }
+    });
+  }
 
-                    let resultingData = {}
-                    resultingData["formResult"] = defaultFormDocument.formResult[defaultFormDocument.formResult.length-1]
-                    result = resultingData
-                }
-                
-
-                return resolve({
-                    message:"Default form fetched successfully",
-                    result:result
-                })
-            }
-            catch(error){
-                return reject({
-                    message:error
-                })
-            }
-        })
-    }
-
-
-           /**
+  /**
  * @api {post} {{url}}/test/api/v1/createDefaultForm/edit Edit Form
  * @apiGroup AccordionForm
  * @apiHeader {String} X-authenticated-user-token Authentication token
@@ -204,80 +206,83 @@ module.exports = class CreateDefaultForm extends Abstract{
     *}
  */
 
-    async edit(req){
-        return new Promise(async (resolve,reject)=>{
-            try{
+  async edit(req) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let result = {};
+        let resultingData;
 
-                let result = {}
-                let resultingData
+        let accordionDocument = await database.models.createDefaultForm
+          .findOne({
+            adminId: req.body.adminId,
+            type: req.body.type,
+            companyName: req.body.companyName
+          })
+          .lean();
 
-                let accordionDocument = await database.models.createDefaultForm.findOne({
-                    adminId:req.body.adminId,
-                    type:req.body.type,
-                    companyName:req.body.companyName
-                }).lean()
+        if (!accordionDocument) {
+          resultingData = await database.models.createDefaultForm.create({
+            adminId: req.body.adminId,
+            companyName: req.body.companyName,
+            createdAt: new Date(),
+            formResult: req.body.formResult,
+            type: req.body.type
+          });
+        } else {
+          let formDataLength = accordionDocument.formResult.length;
 
-                if(!accordionDocument){
+          if (formDataLength < 2) {
+            accordionDocument.formResult.push(req.body.formResult[0]);
 
-                   resultingData = await database.models.createDefaultForm.create({
-                        adminId:req.body.adminId,
-                        companyName:req.body.companyName,
-                        createdAt:new Date(),
-                        formResult:req.body.formResult,
-                        type:req.body.type
-                    })
+            resultingData = await database.models.createDefaultForm.findOneAndUpdate(
+              {
+                adminId: req.body.adminId,
+                type: req.body.type
+              },
+              { $set: { formResult: accordionDocument.formResult } },
+              {
+                new: true,
+                returnNewDocument: true
+              }
+            );
+          } else if (formDataLength === 2) {
+            accordionDocument.formResult[0] = accordionDocument.formResult[1];
+            accordionDocument.formResult.pop();
+            accordionDocument.formResult.push(req.body.formResult[0]);
 
-                } else{
-                    let formDataLength = accordionDocument.formResult.length
+            resultingData = await database.models.createDefaultForm.findOneAndUpdate(
+              {
+                adminId: req.body.adminId,
+                type: req.body.type
+              },
+              { $set: { formResult: accordionDocument.formResult } },
+              {
+                new: true,
+                returnNewDocument: true
+              }
+            );
+          }
+        }
 
-                    if(formDataLength<2){
-                        
-                        accordionDocument.formResult.push(req.body.formResult[0])
+        result["adminId"] = resultingData.adminId;
+        result["companyName"] = resultingData.companyName;
+        result["type"] = resultingData.type;
+        result["formResult"] =
+          resultingData.formResult[resultingData.formResult.length - 1];
 
-                        resultingData = await database.models.createDefaultForm.findOneAndUpdate({
-                            adminId:req.body.adminId,
-                            type:req.body.type  
-                        },{$set:{formResult:accordionDocument.formResult}},{
-                            new:true,
-                            returnNewDocument: true
-                        })
+        return resolve({
+          message: "Created/Updated successfully",
+          result: result
+        });
+      } catch (error) {
+        return reject({
+          message: error
+        });
+      }
+    });
+  }
 
-                    } else if(formDataLength === 2){
-
-                        accordionDocument.formResult[0] = accordionDocument.formResult[1]
-                        accordionDocument.formResult.pop()
-                        accordionDocument.formResult.push(req.body.formResult[0])
-                        
-                        resultingData = await database.models.createDefaultForm.findOneAndUpdate({
-                            adminId:req.body.adminId,
-                            type:req.body.type  
-                        },{$set:{formResult:accordionDocument.formResult}
-                        },{
-                            new:true,
-                            returnNewDocument: true})
-                    }
-                }
-
-                result["adminId"] = resultingData.adminId;
-                result["companyName"] = resultingData.companyName;
-                result["type"] = resultingData.type;
-                result["formResult"] = resultingData.formResult[resultingData.formResult.length-1]
-
-                return resolve({
-                    message:"Created/Updated successfully",
-                    result:result
-                })
-
-            }
-            catch(error){
-                return reject({
-                    message:error
-                })
-            }
-        })
-    }
-
-        /**
+  /**
  * @api {post} {{url}}/test/api/v1/createDefaultForm/undo/:adminId?type=services  Undo Form
  * @apiGroup AccordionForm
  * @apiHeader {String} X-authenticated-user-token Authentication token
@@ -355,43 +360,43 @@ module.exports = class CreateDefaultForm extends Abstract{
 }
  */
 
-    async undo(req){
-        return new Promise(async (resolve,reject)=>{
-            try{
+  async undo(req) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        if (!req.params.id && !req.query.type) {
+          throw "Params is required";
+        }
 
-                if(!req.params.id && !req.query.type){
-                    throw "Params is required"
-                }
+        let accordionForCustomerDocument = await database.models.createDefaultForm
+          .findOne({
+            adminId: req.params.id,
+            type: req.query.type
+          })
+          .lean();
 
-                let accordionForCustomerDocument = await database.models.createDefaultForm.findOne({
-                    adminId:req.params.id,
-                    type:req.query.type
-                }).lean()
+        if (!accordionForCustomerDocument) {
+          throw "No Accordion found for given params";
+        } else {
+          let result = {};
+          result["adminId"] = accordionForCustomerDocument.adminId;
+          result["companyName"] = accordionForCustomerDocument.companyName;
+          result["type"] = accordionForCustomerDocument.type;
+          result["formResult"] = accordionForCustomerDocument.formResult[0];
 
-                if(!accordionForCustomerDocument){
-                    throw "No Accordion found for given params"
-                } else{
+          return resolve({
+            message: "Undo fetched successfully",
+            result: result
+          });
+        }
+      } catch (error) {
+        return reject({
+          message: error
+        });
+      }
+    });
+  }
 
-                    let result = {}
-                    result["adminId"] = accordionForCustomerDocument.adminId;
-                    result["companyName"] = accordionForCustomerDocument.companyName;
-                    result["type"] = accordionForCustomerDocument.type;
-                    result["formResult"] = accordionForCustomerDocument.formResult[0]
-
-                    return resolve({
-                        message:"Undo fetched successfully",
-                        result:result    
-                    })
-                }
-            } catch(error){
-                return reject({
-                    message:error
-                })
-            }
-        })
-    }
-
-            /**
+  /**
  * @api {post} {{url}}/test/api/v1/createDefaultForm/listCustomerExecutiveForm?adminId=5cdf8ecba8eb9ef95572416e&companyName=royal&type=services&id=4  listCustomerExecutiveForm
  * @apiGroup AccordionForm
  * @apiHeader {String} X-authenticated-user-token Authentication token
@@ -411,102 +416,95 @@ module.exports = class CreateDefaultForm extends Abstract{
 *@apiDescription If id is not given it will by default return all parents.
  */
 
-    async listCustomerExecutiveForm(req){
+  async listCustomerExecutiveForm(req) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let result = {};
 
-        return new Promise(async (resolve,reject)=>{
-            try{
+        if (!req.query.companyName) {
+          throw "company name is required";
+        }
 
-                let result={}
+        if (!req.query.adminId) {
+          throw "admin Id is required";
+        }
 
-                if(!req.query.companyName ){
-                    throw "company name is required"
-                }
+        if (!req.query.type) {
+          throw "type of services is required";
+        }
 
-                if(!req.query.adminId ){
-                    throw "admin Id is required"
-                }
+        let resultingData = await database.models.createDefaultForm
+          .findOne(
+            {
+              adminId: req.query.adminId,
+              companyName: req.query.companyName,
+              type: req.query.type
+            },
+            { formResult: 1 }
+          )
+          .lean();
 
-                if(!req.query.type){
-                    throw "type of services is required"
-                }
+        let currentData =
+          resultingData.formResult[resultingData.formResult.length - 1];
+        let childrenValue = [];
 
-                let resultingData = await database.models.createDefaultForm.findOne({
-                    adminId:req.query.adminId,
-                    companyName:req.query.companyName,
-                    type:req.query.type
-                },{formResult:1}).lean()
+        function customerExecutiveHelperForm(formData, id) {
+          // let children = []
 
-                let currentData = resultingData.formResult[resultingData.formResult.length-1]
-                let childrenValue = []
+          if (formData.id === id) {
+            if (formData.children.length > 0) {
+              formData.children.forEach(eachChildren => {
+                let childrenObject = {};
+                childrenObject["label"] = eachChildren.name;
+                childrenObject["value"] = eachChildren.id;
 
-                function customerExecutiveHelperForm(formData,id){
-
-                    // let children = [] 
-            
-                    if(formData.id === id){
-            
-                        if(formData.children.length>0){
-                            
-                            formData.children.forEach(eachChildren=>{
-
-                                let childrenObject = {}
-                                childrenObject["label"] = eachChildren.name;
-                                childrenObject["value"] = eachChildren.id;
-
-                                childrenValue.push(childrenObject)
-                                // childrenValue.push(_.omit(eachChildren,"children"))
-                            })
-            
-                        } 
-                        
-                        // else{
-                            
-                        //     childrenValue.push({
-                        //         label:formData.name,
-                        //         value:formData
-                        //     })
-                        // }
-            
-                        return childrenValue;
-                    } else{
-            
-                        if(formData.children.length>0){
-                            formData.children.forEach(eachChildren=>{
-                                customerExecutiveHelperForm(eachChildren,id)
-                            })
-                        }
-                    }
-            
-                }
-
-                if(req.query.id === undefined){
-
-                    let children= []
-
-                    currentData.children.forEach(eachChildren=>{
-                        let childrenObject = {}
-
-                        childrenObject["label"] = eachChildren.name;
-                        childrenObject["value"] = eachChildren.id;
-
-                        children.push(childrenObject)
-                    })
-                    result["immediateData"] = children
-                } else{
-
-                    customerExecutiveHelperForm(currentData,parseInt(req.query.id))
-                    result["immediateData"] = childrenValue
-                }
-
-                return resolve({
-                    message:"Customer executive form executed successfully",
-                    result:result
-                })
+                childrenValue.push(childrenObject);
+                // childrenValue.push(_.omit(eachChildren,"children"))
+              });
             }
-            catch(error){
-                console.log(error)
+
+            // else{
+
+            //     childrenValue.push({
+            //         label:formData.name,
+            //         value:formData
+            //     })
+            // }
+
+            return childrenValue;
+          } else {
+            if (formData.children.length > 0) {
+              formData.children.forEach(eachChildren => {
+                customerExecutiveHelperForm(eachChildren, id);
+              });
             }
-        })
-    }
-    
-}
+          }
+        }
+
+        if (req.query.id === undefined) {
+          let children = [];
+
+          currentData.children.forEach(eachChildren => {
+            let childrenObject = {};
+
+            childrenObject["label"] = eachChildren.name;
+            childrenObject["value"] = eachChildren.id;
+
+            children.push(childrenObject);
+          });
+          result["immediateData"] = children;
+        } else {
+          customerExecutiveHelperForm(currentData, parseInt(req.query.id));
+          result["immediateData"] = childrenValue;
+        }
+
+        return resolve({
+          message: "Customer executive form executed successfully",
+          result: result
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  }
+};
