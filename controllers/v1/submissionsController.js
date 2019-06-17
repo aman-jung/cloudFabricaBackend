@@ -1,12 +1,11 @@
-let submissionsHelper = require(ROOT+"/module/submissions/helper");
+let submissionsHelper = require(ROOT + "/module/submissions/helper");
 
-module.exports = class Submissions extends Abstract{
-    
-    constructor(){
-        super(submissionsSchema)
-    }
+module.exports = class Submissions extends Abstract {
+  constructor() {
+    super(submissionsSchema);
+  }
 
-                /**
+  /**
  * @api {post} {{url}}/test/api/v1/submissions/make make submission
  * @apiGroup submissions
  * @apiHeader {String} X-authenticated-user-token Authentication token
@@ -46,93 +45,103 @@ module.exports = class Submissions extends Abstract{
 *@apiDescription If id is not given it will throw you an error.
  */
 
-    async make(req){
-        
-        return new Promise(async (resolve,reject)=>{
+  async make(req) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        if (!req.body.id) {
+          throw "Id is required.";
+        } else {
+          let userDocuments = await database.models.user
+            .findOne(
+              {
+                _id: req.userDetails._id
+              },
+              { userInformation: 1, companyName: 1, email: 1 }
+            )
+            .lean();
 
-            try{
+          if (!userDocuments) {
+            throw "User is not present in database";
+          } else {
+            let childrenValue = [];
 
-                if(!req.body.id){
-                    throw "Id is required."
-                } else{
+            function formDataValue(formData, id, index) {
+              if (formData.id === id) {
+                childrenValue.push({
+                  name: formData.name,
+                  id: formData.id,
+                  hierarchyLevel: index
+                });
 
-                   let userDocuments = await database.models.user.findOne({
-                       _id:req.userDetails._id
-                   },{userInformation:1,companyName:1,email:1}).lean()
-
-                   if(!userDocuments){
-                       throw "User is not present in database"
-                   } else{
-
-                    let childrenValue = []
-
-                    function formDataValue(formData,id,index){
-                
-                        if(formData.id === id){
-                            childrenValue.push({
-                                name:formData.name,
-                                id:formData.id,
-                                hierarchyLevel:index
-                            })
-                
-                            return childrenValue;
-                        } else{
-                
-                            if(formData.children.length>0){
-                                formData.children.forEach(eachChildren=>{
-                                    formDataValue(eachChildren,id,index)
-                                })
-                            }
-                        }
-                
-                    }
-                    
-                    let resultDocument = await database.models.createDefaultForm.findOne({
-                        adminId:userDocuments.userInformation.adminId,
-                        type:userDocuments.userInformation.Department,
-                        companyName:userDocuments.companyName
-                        // companyName:req.query.companyName
-                    },{"formResult":1}).lean()
-
-                    let currentEditedForm = resultDocument.formResult[resultDocument.formResult.length-1]
-                    let allIds = req.body.id
-
-                    for(let pointerToAllIds=0;pointerToAllIds<allIds.length;pointerToAllIds++){
-                        formDataValue(currentEditedForm,allIds[pointerToAllIds],pointerToAllIds)
-                    }
-
-                    let submissionObject = {
-                        userDetails:{
-                            submittedBy:userDocuments.userInformation["Employee Id"],
-                            Department:userDocuments.userInformation.Department,
-                            fName:userDocuments.userInformation["First Name"],
-                            lName:userDocuments.userInformation["Last Name"],
-                            adminId:userDocuments.userInformation.adminId
-                        },
-                        submissions:childrenValue,
-                        createdAt:new Date()
-                    }
-
-                    let submissionDocument = await database.models.submissions.create(submissionObject)
-
-                    return resolve({
-                        message:"Submissions saved successfully",
-                        result:submissionDocument
-                    })
-                   }
+                return childrenValue;
+              } else {
+                if (formData.children.length > 0) {
+                  formData.children.forEach(eachChildren => {
+                    formDataValue(eachChildren, id, index);
+                  });
                 }
-
-            } catch(error){
-
-                return reject({
-                    message:error
-                })
+              }
             }
 
-        })
-    }
+            let resultDocument = await database.models.createDefaultForm
+              .findOne(
+                {
+                  adminId: userDocuments.userInformation.adminId,
+                  type: userDocuments.userInformation.Department,
+                  companyName: userDocuments.companyName
+                  // companyName:req.query.companyName
+                },
+                { formResult: 1 }
+              )
+              .lean();
 
-                   /**
+            let currentEditedForm =
+              resultDocument.formResult[resultDocument.formResult.length - 1];
+            let allIds = req.body.id;
+
+            for (
+              let pointerToAllIds = 0;
+              pointerToAllIds < allIds.length;
+              pointerToAllIds++
+            ) {
+              formDataValue(
+                currentEditedForm,
+                allIds[pointerToAllIds],
+                pointerToAllIds
+              );
+            }
+
+            let submissionObject = {
+              userDetails: {
+                submittedBy: userDocuments.userInformation["employeeId"],
+                Department: userDocuments.userInformation.department,
+                fName: userDocuments.userInformation["firstName"],
+                lName: userDocuments.userInformation["lastName"],
+                adminId: userDocuments.userInformation.adminId
+              },
+              submissions: childrenValue,
+              createdAt: new Date()
+            };
+
+            let submissionDocument = await database.models.submissions.create(
+              submissionObject
+            );
+
+            return resolve({
+              message: "Submissions saved successfully",
+              result: submissionDocument
+            });
+          }
+        }
+      } catch (error) {
+        return reject({
+          message: error
+        });
+      }
+    });
+  }
+
+  /**
  * @api {get} {{url}}/test/api/v1/listSubmissions/:adminId List Table data
  * @apiGroup submissions
  * @apiHeader {String} X-authenticated-user-token Authentication token
@@ -165,75 +174,96 @@ module.exports = class Submissions extends Abstract{
 }
 *@apiDescription adminId is mandatory.
  */
- 
-    async listSubmissions(req){
-        return new Promise(async (resolve,reject)=>{
 
-            try{
+  async listSubmissions(req) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        if (!req.params.id) {
+          throw "Admin id is mandatory";
+        }
 
-                if(!req.params.id){
-                    throw "Admin id is mandatory"
-                }
+        let submissionDocuments = await database.models.submissions
+          .find(
+            {
+              "userDetails.adminId": ObjectId(req.params.id)
+            },
+            { _id: 1 }
+          )
+          .lean();
 
-               let submissionDocuments = await database.models.submissions.find({
-                "userDetails.adminId":ObjectId(req.params.id)
-               },{_id:1}).lean()
+        let chunkOfSubmissionDocument = _.chunk(submissionDocuments, 10);
+        let submissionIds;
+        let submissionsData;
+        let results = [];
 
-               let chunkOfSubmissionDocument = _.chunk(submissionDocuments,10);
-               let submissionIds
-               let submissionsData
-               let results = []
-
-               for(let pointerToSubmissions=0;pointerToSubmissions<chunkOfSubmissionDocument.length;pointerToSubmissions++){
-                   
-                submissionIds = chunkOfSubmissionDocument[pointerToSubmissions].map(eachSubmissionData=>{
-                       return eachSubmissionData._id
-                   })
-
-                submissionsData = await database.models.submissions.find({
-                    _id:{$in:submissionIds}
-                },{_id:0,__v:0}).lean()
-
-                await Promise.all(submissionsData.map(async eachSubmissionData=>{
-                    let submissions = {}
-                    submissions["data"] = []
-                    submissions["table"] = true
-
-                    Object.keys(eachSubmissionData.userDetails).forEach(eachUserCredentials=>{
-                        if(["adminId"].indexOf(eachUserCredentials) == -1){
-                            submissions[eachUserCredentials] = eachSubmissionData.userDetails[eachUserCredentials]
-                        }
-                    })
-
-                    eachSubmissionData.submissions[0]["label"] = "parent"
-
-                    submissions.data.push(eachSubmissionData.submissions[0])
-
-                    for(let pointerToSubmissions = 1;pointerToSubmissions<eachSubmissionData.submissions.length;pointerToSubmissions++){
-                        eachSubmissionData.submissions[pointerToSubmissions]["label"] = "children"+pointerToSubmissions;
-                        submissions.data.push(eachSubmissionData.submissions[pointerToSubmissions])
-                    }
-
-                    results.push(submissions)
-
-                }))
-
-               }
-
-               return resolve({
-                result:results
-                })
-
-
-            } catch(error){
-                return reject({
-                    message:error
-                })
+        for (
+          let pointerToSubmissions = 0;
+          pointerToSubmissions < chunkOfSubmissionDocument.length;
+          pointerToSubmissions++
+        ) {
+          submissionIds = chunkOfSubmissionDocument[pointerToSubmissions].map(
+            eachSubmissionData => {
+              return eachSubmissionData._id;
             }
-        })
-    }
+          );
 
-                   /**
+          submissionsData = await database.models.submissions
+            .find(
+              {
+                _id: { $in: submissionIds }
+              },
+              { _id: 0, __v: 0 }
+            )
+            .lean();
+
+          await Promise.all(
+            submissionsData.map(async eachSubmissionData => {
+              let submissions = {};
+              submissions["data"] = [];
+              submissions["table"] = true;
+
+              Object.keys(eachSubmissionData.userDetails).forEach(
+                eachUserCredentials => {
+                  if (["adminId"].indexOf(eachUserCredentials) == -1) {
+                    submissions[eachUserCredentials] =
+                      eachSubmissionData.userDetails[eachUserCredentials];
+                  }
+                }
+              );
+
+              eachSubmissionData.submissions[0]["label"] = "parent";
+
+              submissions.data.push(eachSubmissionData.submissions[0]);
+
+              for (
+                let pointerToSubmissions = 1;
+                pointerToSubmissions < eachSubmissionData.submissions.length;
+                pointerToSubmissions++
+              ) {
+                eachSubmissionData.submissions[pointerToSubmissions]["label"] =
+                  "children" + pointerToSubmissions;
+                submissions.data.push(
+                  eachSubmissionData.submissions[pointerToSubmissions]
+                );
+              }
+
+              results.push(submissions);
+            })
+          );
+        }
+
+        return resolve({
+          result: results
+        });
+      } catch (error) {
+        return reject({
+          message: error
+        });
+      }
+    });
+  }
+
+  /**
  * @api {get} {{url}}/test/api/v1/submissions/submissionDrillDown/:adminId?type=services Graph submissions
  * @apiGroup submissions
  * @apiHeader {String} X-authenticated-user-token Authentication token
@@ -258,84 +288,107 @@ module.exports = class Submissions extends Abstract{
 *@apiDescription adminId is mandatory.
  */
 
-    async submissionDrillDown(req){
-        return new Promise(async (resolve,reject)=>{
+  async submissionDrillDown(req) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        if (!req.params.id) {
+          throw "Admin id is required";
+        }
 
-            try{
+        let editedForm = await database.models.createDefaultForm
+          .findOne(
+            {
+              adminId: ObjectId(req.params.id),
+              type: req.query.type
+            },
+            { formResult: 1, adminId: 1 }
+          )
+          .lean();
 
-                if(!req.params.id){
-                    throw "Admin id is required"
-                }
+        let allFormValue = submissionsHelper.defaultForm(
+          editedForm.formResult[editedForm.formResult.length - 1]
+        );
 
-                let editedForm = await database.models.createDefaultForm.findOne({
-                    adminId:ObjectId(req.params.id),
-                    type:req.query.type
-                },{formResult:1,adminId:1}).lean()
+        let submissionsDocuments = await database.models.submissions
+          .find(
+            {
+              "userDetails.adminId": editedForm.adminId
+            },
+            { _id: 1 }
+          )
+          .lean();
 
+        if (!submissionsDocuments.length > 0) {
+          throw "Submissions is not there";
+        }
 
-                let allFormValue = submissionsHelper.defaultForm(editedForm.formResult[editedForm.formResult.length-1])
+        let chunkOfSubmissionDocument = _.chunk(submissionsDocuments, 10);
+        let submissionIds;
+        let submissionDocuments;
+        let results = {};
+        results["data"] = [];
 
-                let submissionsDocuments = await database.models.submissions.find({
-                    "userDetails.adminId":editedForm.adminId
-                },{_id:1}).lean()
+        results.graphData = true;
 
-                if(!submissionsDocuments.length>0){
-                    throw "Submissions is not there"
-                }
-
-                let chunkOfSubmissionDocument = _.chunk(submissionsDocuments,10);
-                let submissionIds;
-                let submissionDocuments
-                let results = {}
-                results["data"] = []
-
-                results.graphData=true
-                
-                for(let pointerToSubmissions=0;pointerToSubmissions<chunkOfSubmissionDocument.length;pointerToSubmissions++){
-
-                    submissionIds = chunkOfSubmissionDocument[pointerToSubmissions].map(eachSubmissionModel=>{
-                        return eachSubmissionModel._id
-                    })
-
-                    submissionDocuments = await database.models.submissions.find({
-                        _id:{$in:submissionIds}
-                    },{submissions:1}).lean()
-
-                    await Promise.all(submissionDocuments.map(async eachSubmissionDocument=>{
-
-                        for(let pointerToEachSubmissionData=0;pointerToEachSubmissionData<eachSubmissionDocument.submissions.length;pointerToEachSubmissionData++){
-                            let singleSubmission = eachSubmissionDocument.submissions[pointerToEachSubmissionData]
-
-                            if(allFormValue[singleSubmission.name]){
-                                allFormValue[singleSubmission.name].score +=1;
-                            }
-                        }
-
-                    }))
-                }
-
-                Object.keys(allFormValue).forEach(eachFormData=>{
-                            
-                    if(allFormValue[eachFormData].score !== 0){
-                        results.data.push({
-                            name:eachFormData,
-                            score:allFormValue[eachFormData].score
-                        })
-                    }
-
-                })
-
-                return resolve({
-                    message:"Data for graph fetched successfully",
-                    result:results
-                })
-
-            } catch(error){
-                return reject({
-                    message:error
-                })
+        for (
+          let pointerToSubmissions = 0;
+          pointerToSubmissions < chunkOfSubmissionDocument.length;
+          pointerToSubmissions++
+        ) {
+          submissionIds = chunkOfSubmissionDocument[pointerToSubmissions].map(
+            eachSubmissionModel => {
+              return eachSubmissionModel._id;
             }
-        })
-    }
+          );
 
-}
+          submissionDocuments = await database.models.submissions
+            .find(
+              {
+                _id: { $in: submissionIds }
+              },
+              { submissions: 1 }
+            )
+            .lean();
+
+          await Promise.all(
+            submissionDocuments.map(async eachSubmissionDocument => {
+              for (
+                let pointerToEachSubmissionData = 0;
+                pointerToEachSubmissionData <
+                eachSubmissionDocument.submissions.length;
+                pointerToEachSubmissionData++
+              ) {
+                let singleSubmission =
+                  eachSubmissionDocument.submissions[
+                    pointerToEachSubmissionData
+                  ];
+
+                if (allFormValue[singleSubmission.name]) {
+                  allFormValue[singleSubmission.name].score += 1;
+                }
+              }
+            })
+          );
+        }
+
+        Object.keys(allFormValue).forEach(eachFormData => {
+          if (allFormValue[eachFormData].score !== 0) {
+            results.data.push({
+              name: eachFormData,
+              score: allFormValue[eachFormData].score
+            });
+          }
+        });
+
+        return resolve({
+          message: "Data for graph fetched successfully",
+          result: results
+        });
+      } catch (error) {
+        return reject({
+          message: error
+        });
+      }
+    });
+  }
+};
