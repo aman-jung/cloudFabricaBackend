@@ -130,7 +130,7 @@ module.exports = class User extends Abstract {
 
         // result["message"] = "token generated successfully";
         // result["token"] = token;
-        // result["companyName"] = userVerify.companyName;
+        result["companyName"] = userVerify.companyName;
         // result["success"] = true;
 
         if (userVerify.userInformation) {
@@ -141,8 +141,7 @@ module.exports = class User extends Abstract {
           success: true,
           message: "token generated successfully",
           token: token,
-          companyName: userVerify.companyName,
-          userInformation: userVerify.userInformation
+          result: result
         });
       } catch (error) {
         return reject({
