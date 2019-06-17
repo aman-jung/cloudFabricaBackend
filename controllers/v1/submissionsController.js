@@ -112,13 +112,13 @@ module.exports = class Submissions extends Abstract {
             }
 
             let submissionObject = {
-              //   userDetails: {
-              //     submittedBy: userDocuments.userInformation["employeeId"],
-              //     Department: userDocuments.userInformation.department,
-              //     fName: userDocuments.userInformation["firstName"],
-              //     lName: userDocuments.userInformation["lastName"],
-              //     adminId: userDocuments.userInformation.adminId
-              //   },
+              userDetails: {
+                submittedBy: userDocuments.userInformation["employeeId"],
+                Department: userDocuments.userInformation.department,
+                fName: userDocuments.userInformation["firstName"],
+                lName: userDocuments.userInformation["lastName"],
+                adminId: userDocuments.userInformation.adminId
+              },
               submissions: childrenValue,
               createdAt: new Date()
             };
