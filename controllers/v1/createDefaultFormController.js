@@ -486,7 +486,7 @@ module.exports = class CreateDefaultForm extends Abstract {
           }
         }
 
-        if (req.query.id === undefined) {
+        if (req.query.id === "undefined") {
           let children = [];
 
           currentData.children.forEach(eachChildren => {
