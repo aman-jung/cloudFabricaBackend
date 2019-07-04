@@ -89,7 +89,6 @@ module.exports = class Submissions extends Abstract {
                   adminId: userDocuments.userInformation.adminId,
                   type: userDocuments.userInformation.department,
                   companyName: userDocuments.companyName
-                  // companyName:req.query.companyName
                 },
                 { formResult: 1 }
               )
@@ -119,6 +118,8 @@ module.exports = class Submissions extends Abstract {
                 lName: userDocuments.userInformation["lastName"],
                 adminId: userDocuments.userInformation.adminId
               },
+              ratings:req.body.ratings,
+              feedback:req.body.feedback,
               submissions: childrenValue,
               createdAt: new Date()
             };
