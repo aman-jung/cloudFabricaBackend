@@ -231,23 +231,25 @@ module.exports = class Submissions extends Abstract {
                 }
               );
 
-              eachSubmissionData.submissions[0]["label"] = "parent";
+              if(eachSubmissionData.submissions.length>0){
+                eachSubmissionData.submissions[0]["label"] = "parent";
 
-              submissions.data.push(eachSubmissionData.submissions[0]);
+                submissions.data.push(eachSubmissionData.submissions[0]);
 
-              for (
-                let pointerToSubmissions = 1;
-                pointerToSubmissions < eachSubmissionData.submissions.length;
-                pointerToSubmissions++
-              ) {
+                for (
+                  let pointerToSubmissions = 1;
+                  pointerToSubmissions < eachSubmissionData.submissions.length;
+                  pointerToSubmissions++
+                ) {
                 eachSubmissionData.submissions[pointerToSubmissions]["label"] =
                   "children" + pointerToSubmissions;
                 submissions.data.push(
                   eachSubmissionData.submissions[pointerToSubmissions]
                 );
-              }
+                }
 
-              results.push(submissions);
+                results.push(submissions);
+              }
             })
           );
         }
