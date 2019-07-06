@@ -1,5 +1,5 @@
 // let fs = require("fs")
-// let slackClient = require(ROOT +"/generics/helpers/slackCommunication")
+let slackClient = require(ROOT +"/generics/helpers/slackCommunication")
 let authenticator = require(ROOT +"/generics/helpers/middleware/authenticator")
 
 module.exports = function(app){
@@ -37,21 +37,39 @@ module.exports = function(app){
                 }
             } catch(error){
                 
+                let customFields = {
+                        message:"NON_LOGGED_IN_USER"
+                  }
+
                 res.status(error.status?error.status:400).json({
                     status:error.status?error.status:400,
                     message:error.message
                 })
 
+                if(req.userDetails){
+                    customFields={
+                        message:"LOGGED_IN_USER",
+                        ["Company Name"]:req.userDetails.companyName,
+                        Email:req.userDetails.email,
+                        role:req.userDetails.role
+                    }    
+
+                }
+
                 const toLogObject = {
                     method:req.method,
                     url:req.url,
-                    headers:req.headers,
+                    statusCode:res.statusCode,
+                    statusMessage:res.statusMessage,
+                    // contentType:req.headers.content-type,
+                    host:req.headers.host,
                     body:req.body,
-                    errorMsg:error.message?error.message:null,
-                    errorStack:error.stack?error.stack:null
+                    errorMsg:error.message.message?error.message.message:null,
+                    customFields:customFields,
+                    erroStack:error.message.stack?error.message.stack:null
                 }
 
-                // slackClient.sendLogger(toLogObject)
+                slackClient.sendLogger(toLogObject)
 
                 console.log("-------Response STARTS Here ----------------")
                 console.log(error)

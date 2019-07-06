@@ -1,19 +1,38 @@
 let MY_SLACK_TOKEN = process.env.SLACK_WEBHOOK_URL;
 let slackClient = require("slack-notify")(MY_SLACK_TOKEN)
 
+
 const sendLogger = function(logger){
 
     if(SLACK_COMMUNICATION_ON_OFF = "ON"){
         let fieldsData = new Array
         let attachmentData = new Array
 
-        Object.keys(logger).forEach(eachLogger=>[
+        Object.keys(_.pick(logger,["host","method","statusCode","statusMessage","url","errorMsg","erroStack"])).forEach(eachLogger=>[
             fieldsData.push({
                 title:eachLogger,
                 value:logger[eachLogger],
                 short:false
             })
         ])
+
+        Object.keys(logger.body).forEach(eachLoggerBody=>{
+            if(["password"].indexOf(eachLoggerBody) === -1){
+            fieldsData.push({
+                title:eachLoggerBody,
+                value:logger.body[eachLoggerBody],
+                short:false
+            })
+        }
+        })
+
+        Object.keys(logger.customFields).forEach(eachCustomField=>{
+            fieldsData.push({
+                title:eachCustomField,
+                value:logger.customFields[eachCustomField],
+                short:false
+            })
+        })
 
         let attachment = {
             color: "#36a64f",
@@ -26,26 +45,8 @@ const sendLogger = function(logger){
           text: "Exception Logs",
           attachments: attachmentData
     }
-
-
-    // slackClient.alert({
-    //     text: 'Current server stats',
-    //     attachments: [
-    //       {
-    //         fallback: 'Required Fallback String',
-    //         fields: [
-    //           { title: 'CPU usage', value: '7.51%', short: true },
-    //           { title: 'Memory usage', value: '254mb', short: true }
-    //         ]
-    //       }
-    //     ]
-    //   });
       slackClient.alert(options)
     }
-    // slackClient.bug('Something bad happened!'); // Posts to #bugs by default
-    // slackClient.success('Something good happened!'); // Posts to #alerts by default
-    // slackClient.alert('Something important happened!'); // Posts to #alerts by default
-    // slackClient.note('Here is a note.'); // Posts to #alerts by default
 }
 
 module.exports = {
