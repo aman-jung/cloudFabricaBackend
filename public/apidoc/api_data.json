@@ -567,6 +567,39 @@
   },
   {
     "type": "get",
+    "url": "{{url}}/test/api/v1/submissions/submissionBasedOnRatings/:adminId?type=services",
+    "title": "Submissions based on ratings",
+    "group": "submissions",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-authenticated-user-token",
+            "description": "<p>Authentication token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Listed submission response:",
+          "content": "{\n    \"message\": \"Data for graph fetched successfully\",\n    \"status\": 200,\n    \"result\": {\n        \"data\": [\n            {\n                \"name\": \"Excellent\",\n                \"score\": 2\n            },\n            {\n                \"name\": \"Average\",\n                \"score\": 0\n            },\n            {\n                \"name\": \"Not Satisfied\",\n                \"score\": 0\n            }\n        ],\n        \"graphData\": true\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "description": "<p>adminId and type of service is mandatory.</p>",
+    "version": "0.0.0",
+    "filename": "controllers/v1/submissionsController.js",
+    "groupTitle": "submissions",
+    "name": "GetUrlTestApiV1SubmissionsSubmissionbasedonratingsAdminidTypeServices"
+  },
+  {
+    "type": "get",
     "url": "{{url}}/test/api/v1/submissions/submissionDrillDown/:adminId?type=services",
     "title": "Graph submissions",
     "group": "submissions",
