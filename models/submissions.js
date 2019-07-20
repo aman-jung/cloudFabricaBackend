@@ -3,6 +3,8 @@ module.exports={
     schema:{
         "userDetails":"Object",
         "submissions":Array,
-        "createdAt":"Date"
+        "createdAt":"Date",
+        "ratings":Number,
+        "feedback":String
     }   
 }

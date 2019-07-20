@@ -200,7 +200,7 @@
   },
   {
     "type": "post",
-    "url": "{{url}}/test/api/v1/formManagement/listAdminForm?adminId=5cdf8ecba8eb9ef95572416f",
+    "url": "{{url}}/test/api/v1/formManagement/listAdminForm?adminId",
     "title": "List admin form",
     "group": "Form",
     "header": {
@@ -219,6 +219,11 @@
     "parameter": {
       "examples": [
         {
+          "title": "Body Params:",
+          "content": "{\n\t\"type\":\"Services\",\n\t\"adminId\":\"5cdf8ecba8eb9ef95572416e\"\n}",
+          "type": "json"
+        },
+        {
           "title": "response:",
           "content": "   {\n    \"message\": \"Form Listed Successfully\",\n    \"status\": 200,\n    \"result\": [\n        {\n            \"type\": \"Billing\"\n        }\n    ]\n}\n}",
           "type": "json"
@@ -228,7 +233,7 @@
     "version": "0.0.0",
     "filename": "controllers/v1/formManagementController.js",
     "groupTitle": "Form",
-    "name": "PostUrlTestApiV1FormmanagementListadminformAdminid5cdf8ecba8eb9ef95572416f"
+    "name": "PostUrlTestApiV1FormmanagementListadminformAdminid"
   },
   {
     "type": "get",
@@ -582,12 +587,12 @@
       "examples": [
         {
           "title": "body response:",
-          "content": " {\n\t\"id\":[2,4]\n}",
+          "content": " {\n  \"id\":[2,4],\n  \t\"ratings\":4,\n\t\"feedback\":\"No options\"\n}",
           "type": "json"
         },
         {
           "title": "Listed submission response:",
-          "content": "   {\n    \"message\": \"Submissions saved successfully\",\n    \"status\": 200,\n    \"result\": {\n        \"submissions\": [\n            {\n                \"name\": \"A\",\n                \"id\": 2,\n                \"hierarchyLevel\": 0\n            },\n            {\n                \"name\": \"B\",\n                \"id\": 4,\n                \"hierarchyLevel\": 1\n            }\n        ],\n        \"_id\": \"5cf644a37602972b50f3711b\",\n        \"userDetails\": {\n            \"submittedBy\": 1234,\n            \"Department\": \"services\",\n            \"fName\": \"Raunak\",\n            \"lName\": \"Ag\",\n            \"adminId\": \"5cdf8ecba8eb9ef95572416e\"\n        },\n        \"createdAt\": \"2019-06-04T10:14:55.931Z\",\n        \"__v\": 0\n    }\n}",
+          "content": "   {\n    \"message\": \"Submissions saved successfully\",\n    \"status\": 200,\n    \"result\": {\n        \"submissions\": [\n            {\n                \"name\": \"A\",\n                \"id\": 2,\n                \"hierarchyLevel\": 0\n            },\n            {\n                \"name\": \"B\",\n                \"id\": 4,\n                \"hierarchyLevel\": 1\n            }\n        ],\n        \"_id\": \"5cf644a37602972b50f3711b\",\n        \"userDetails\": {\n            \"submittedBy\": 1234,\n            \"Department\": \"services\",\n            \"fName\": \"Raunak\",\n            \"lName\": \"Ag\",\n            \"adminId\": \"5cdf8ecba8eb9ef95572416e\"\n        },\n          \"ratings\": 4,\n        \"feedback\": \"No options\",\n        \"createdAt\": \"2019-06-04T10:14:55.931Z\",\n        \"__v\": 0\n    }\n}",
           "type": "json"
         }
       ]

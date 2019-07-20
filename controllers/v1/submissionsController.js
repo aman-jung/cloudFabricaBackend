@@ -11,7 +11,9 @@ module.exports = class Submissions extends Abstract {
  * @apiHeader {String} X-authenticated-user-token Authentication token
  *   @apiParamExample {json}  body response:
  {
-	"id":[2,4]
+  "id":[2,4],
+  	"ratings":4,
+	"feedback":"No options"
 }
 * @apiParamExample {json} Listed submission response:
    {
@@ -38,6 +40,8 @@ module.exports = class Submissions extends Abstract {
             "lName": "Ag",
             "adminId": "5cdf8ecba8eb9ef95572416e"
         },
+          "ratings": 4,
+        "feedback": "No options",
         "createdAt": "2019-06-04T10:14:55.931Z",
         "__v": 0
     }
