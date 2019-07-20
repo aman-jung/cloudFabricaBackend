@@ -483,26 +483,18 @@ module.exports = class Submissions extends Abstract {
   }
 
     /**
- * @api {get} {{url}}/test/api/v1/submissions/submissionBasedOnRatings/:adminId?type=services Submissions based on ratings
+ * @api {get} {{url}}/test/api/v1/submissions/submissionBasedOnDepartment/:adminId Submissions based on department
  * @apiGroup submissions
  * @apiHeader {String} X-authenticated-user-token Authentication token
-* @apiParamExample {json} Listed submission response:
+* @apiParamExample {json} Listed Department submission response:
 {
-    "message": "Data for graph fetched successfully",
+    "message": "Department Submissions fetched successfully",
     "status": 200,
     "result": {
         "data": [
             {
-                "name": "Excellent",
-                "score": 2
-            },
-            {
-                "name": "Average",
-                "score": 0
-            },
-            {
-                "name": "Not Satisfied",
-                "score": 0
+                "name": "services",
+                "score": 3
             }
         ],
         "graphData": true
@@ -511,20 +503,19 @@ module.exports = class Submissions extends Abstract {
 *@apiDescription adminId and type of service is mandatory.
  */
 
-async submissionBasedOnRatings(req) {
+async submissionBasedOnDepartment(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!req.params.id || !req.query.type) {
+      if (!req.params.id) {
         throw "Admin id/type is required";
       }
 
       let submissionsDocuments = await database.models.submissions
         .find(
           {
-            "userDetails.adminId": ObjectId(req.params.id),
-            "userDetails.Department":req.query.type
+            "userDetails.adminId": ObjectId(req.params.id)
           },
-          { ratings:1 }
+          { "userDetails.Department":1 }
         )
         .lean();
 
@@ -532,29 +523,34 @@ async submissionBasedOnRatings(req) {
         throw "Submissions is not there";
       }
 
-      let excellent = submissionsDocuments.filter(item=>item.ratings>3)
+      let countDepartmentSubmission = {}
 
-      let average = submissionsDocuments.filter(item=>item.ratings === 3)
-      let notSatisfied = submissionsDocuments.filter(item=>item.ratings<3)
-      
+      for(let pointerToSubmission = 0;pointerToSubmission<submissionsDocuments.length;pointerToSubmission++){
+        let submissionDepartment = submissionsDocuments[pointerToSubmission].userDetails.Department
+        
+        if(!countDepartmentSubmission[submissionDepartment]){
+          countDepartmentSubmission[submissionDepartment] = {
+            count:1
+          }
+        }else{
+          countDepartmentSubmission[submissionDepartment].count += 1
+        }
+        }
+
       let results = {}
       results["data"] = []
 
-      results.data.push({
-        name:"Excellent",
-        score:excellent.length
-      },{
-        name:"Average",
-        score:average.length
-      },{
-        name:"Not Satisfied",
-        score:notSatisfied.length
+      Object.keys(countDepartmentSubmission).forEach(eachDepartmentCount=>{
+        results.data.push({
+          name:eachDepartmentCount,
+          score:countDepartmentSubmission[eachDepartmentCount].count
+        })
       })
 
       results["graphData"] = true
 
       return resolve({
-        message: "Data for ratings fetched successfully",
+        message: "Department Submissions fetched successfully",
         result: results
       });
     } catch (error) {

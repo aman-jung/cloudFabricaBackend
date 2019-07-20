@@ -534,6 +534,39 @@
   },
   {
     "type": "get",
+    "url": "{{url}}/test/api/v1/submissions/submissionBasedOnDepartment/:adminId",
+    "title": "Submissions based on department",
+    "group": "submissions",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-authenticated-user-token",
+            "description": "<p>Authentication token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Listed Department submission response:",
+          "content": "{\n    \"message\": \"Department Submissions fetched successfully\",\n    \"status\": 200,\n    \"result\": {\n        \"data\": [\n            {\n                \"name\": \"services\",\n                \"score\": 3\n            }\n        ],\n        \"graphData\": true\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "description": "<p>adminId and type of service is mandatory.</p>",
+    "version": "0.0.0",
+    "filename": "controllers/v1/submissionsController.js",
+    "groupTitle": "submissions",
+    "name": "GetUrlTestApiV1SubmissionsSubmissionbasedondepartmentAdminid"
+  },
+  {
+    "type": "get",
     "url": "{{url}}/test/api/v1/submissions/submissionBasedOnRatings/:adminId?type=services",
     "title": "Submissions based on ratings",
     "group": "submissions",
